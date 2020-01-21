@@ -3,8 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>특허청 이미지 유사도 분석</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> <!-- vue -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script> <!-- axios -->
 </head>
 <body>
-    이미지 유사도 분석을 위한 서비스랍니다.
+
+    이미지 유사도 분석을 위한 서비스.
+
+    <div id="app">
+        <input type="file" id="file" name="file" ref="file" @change="handleFileUpload">
+        <button type="submit" @click="submitFile">제출</button>
+    </div>
+
+    <script>
+        axios.defaults.xsrfCookieName = 'csrftoken';
+        axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+        new Vue({
+            el: '#app',
+            data() {
+              return {
+                  file: ''
+              }
+            },
+            methods: {
+               submitFile() {
+                   let formData = new FormData();
+                   formData.append('file', this.file);
+
+                   axios.post("{% url 'api:patent_predict' %}", formData, {
+                       headers: { 'Content-Type': 'multipart/form-data' }
+                   })
+                   .then((res) => {
+                       console.log('success');
+                   })
+                   .catch((err) => {
+                      console.log('fail');
+                   });
+               },
+               handleFileUpload() {
+                   this.file = this.$refs.file.files[0];
+               }
+           }
+        });
+    </script>
 </body>
 </html>

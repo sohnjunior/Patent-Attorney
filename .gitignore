@@ -4,6 +4,9 @@ secrets.json
 myvenv/
 db.sqlite3
 .idea/
+deeprank.pt
+embedding.txt
+triplet.csv
 
 ### Django ###
 *.log
