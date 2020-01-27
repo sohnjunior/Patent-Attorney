@@ -17,28 +17,21 @@
         <hr>
         <!--    받아온 이미지 데이터 출력하는 부분 - 수정 필요 -->
         <div v-if="flag">
-            <predict-result v-bind:imageBytes="imageBytes"></predict-result>
+            <predict-result v-bind:images="imageBytes"></predict-result>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> <!-- vue -->
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> <!-- Jquery -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script> <!-- axios -->
     <script>
         axios.defaults.xsrfCookieName = 'csrftoken';
         axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
         let PredictResult = {
-            props: {
-                imageBytes:{
-                    type:Array,
-                    default:function () { return [[]] }
-                }
-            },
-            template: '<div><h1>결과사진</h1>' +
-                //'<img v-for="imageByte in imageBytes" v-bind:src="\'data:image/jpeg;base64,\' + imageByte">' +
-                '<img v-bind:src="\'data:image/jpeg;base64,\' + imageBytes[0]">' +
-                '</div>'
+            props: ['images'],
+            template: '<img :src="`data:image/jpeg;base64,${images[0]}`">'
+                //'<img v-for="imageByte in imageBytes" v-bind:src="\'data:image/jpeg;base64,\' + imageByte">'
         };
 
         new Vue({
@@ -66,7 +59,6 @@
                        var result = jQuery.parseJSON(res.data);
                        this.imageBytes.push(result.images);
                        console.log(this.imageBytes[0][0]);
-                       console.log(res);
                        this.flag = true;
                    })
                    .catch((err) => {
