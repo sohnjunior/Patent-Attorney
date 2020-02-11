@@ -2,7 +2,7 @@
 .DS_Store
 secrets.json
 myvenv/
-db.sqlite3
+PatentAttorney/db.sqlite3
 .idea/
 static/
 deeprank.pt
