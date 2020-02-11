@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api.apps.ApiConfig',
     'webpack_loader',
+
 ]
 
 MIDDLEWARE = [
@@ -133,3 +134,4 @@ WEBPACK_LOADER = {
       'STATS_FILE': os.path.join(BASE_DIR, 'frontend/webpack-stats.json'),
   }
 }
+

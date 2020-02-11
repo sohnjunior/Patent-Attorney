@@ -8,5 +8,9 @@ urlpatterns = [
     path('patent_image/list/', views.ApiPatentList.as_view(), name='patent_list'),
 
     # /api/patent_image/predict
+<<<<<<< HEAD
     path('patent_image/predict/', views.ApiPatentPredict.as_view(), name='patent_predict'),
+=======
+    path('patent_image/predict', views.ApiPatentPredict.as_view(), name='patent_predict'),
+>>>>>>> 9ffb340f3bf3decde8746879a26857388df5a92b
 ]
