@@ -37,7 +37,7 @@ export default {
       let formData = new FormData();
       formData.append('file', this.file);
 
-      axios.post("/api/patent_image/predict", formData, {
+      axios.post("/api/patent_image/predict/", formData, {
         headers: {'Content-Type': 'multipart/form-data'}
       })
         .then((res) => {
