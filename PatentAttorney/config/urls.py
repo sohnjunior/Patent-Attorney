@@ -7,15 +7,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # Home page
-    #path('', HomeView.as_view(), name='home'),
+    path('', HomeView.as_view(), name='app'),
 
     # Api
     path('api/', include('api.urls')),
-
-
-    path("",
-         TemplateView.as_view(template_name="test.html"),
-         name="app",
-         ),
-
 ]
