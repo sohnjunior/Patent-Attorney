@@ -22,5 +22,8 @@ module.exports = {
     },
     pages: {
         index: 'src/main.js'
-    }
+    },
+    transpileDependencies: [
+    'vuetify',
+    ],
 };

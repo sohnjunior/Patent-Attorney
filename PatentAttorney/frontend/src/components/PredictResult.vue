@@ -20,7 +20,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 img{
-  width:150px;
+  width:250px;
   height: auto;
 }
 </style>

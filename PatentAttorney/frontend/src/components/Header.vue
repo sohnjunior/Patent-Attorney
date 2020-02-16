@@ -1,13 +1,18 @@
 <template>
-  <v-app id = "app">
+  <v-app id="inspire">
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+    >
+    </v-navigation-drawer>
+
     <v-app-bar
       app
       color="indigo"
       dark
     >
-      <v-toolbar-title>
-        ImagePredict Service
-      </v-toolbar-title>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-toolbar-title>ImagePredict Service</v-toolbar-title>
     </v-app-bar>
 
     <v-content>
@@ -35,7 +40,7 @@
 </template>
 
 <script>
-export default {
+  export default {
     props: {
       source: String,
     },
@@ -45,6 +50,3 @@ export default {
   }
 </script>
 
-<style>
-
-</style>
