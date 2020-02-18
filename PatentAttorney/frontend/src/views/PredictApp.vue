@@ -6,7 +6,13 @@
           <v-file-input v-model="file" label="Select Image File"  @change="handleFileUpload" outlined dense></v-file-input>
         </v-col>
         <v-col cols="15" md="10">
-          <v-select v-model="count":items="count" label="Count" required @change="handleCountload"></v-select>
+          <v-select
+            :items="count"
+            v-model="selected"
+            label="Count"
+            outlined
+            @click="handleCountload">
+          </v-select>
         </v-col>
         <v-col cols="15" md="10">
           <v-btn class="ma-2" outlined color="indigo" type="submit" @click="submitFile">제출</v-btn>
@@ -39,14 +45,15 @@ export default {
       file: '',
       imageBytes: [], // json으로 받은 이미지 raw 데이터를 저장하는 배열
       flag: false,
-      count : [1,2,3,4,5,],
+      count : [1,2,3,4,5],
+      selected: 0,
     }
   },
   methods: {
     submitFile() {
       let formData = new FormData();
       formData.append('file', this.file);
-      formData.append('count', this.count);
+      formData.append('selected', this.selected);
 
       axios.post("/api/patent_image/predict/", formData, {
         headers: {'Content-Type': 'multipart/form-data'}
@@ -56,6 +63,7 @@ export default {
           var result = jQuery.parseJSON(res.data);
           this.imageBytes.push(result.images);
           console.log(this.imageBytes[0][0]);
+          console.log(this.selected);
           console.log(res);
           this.flag = true;
         })
@@ -67,7 +75,7 @@ export default {
       this.file = this.$refs.file.files[0];
     },
     handleCountload() {
-      this.count = this.$refs.count;
+      this.selected = this.$refs.count;
     }
 
   }
@@ -90,7 +98,4 @@ li {
 a {
   color: #42b983;
 }
-  .v-file-input{
-   length: 200;
-  }
 </style>
