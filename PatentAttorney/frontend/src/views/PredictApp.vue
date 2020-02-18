@@ -6,7 +6,7 @@
           <v-file-input v-model="file" label="Select Image File"  @change="handleFileUpload" outlined dense></v-file-input>
         </v-col>
         <v-col cols="15" md="10">
-          <v-select v-model="count":items="count" label="Count" required @change="handleCountload"></v-select>
+          <v-select v-model="count" :items="count" label="Count" required @change="handleCountload"></v-select>
         </v-col>
         <v-col cols="15" md="10">
           <v-btn class="ma-2" outlined color="indigo" type="submit" @click="submitFile">제출</v-btn>
@@ -16,13 +16,13 @@
         <hr>
         <!--    받아온 이미지 데이터 출력하는 부분 - 수정 필요 -->
     <div v-if="flag">
-      <PredictResult v-bind:images = "imageBytes"/>
+      <PredictResult v-bind:images="imageBytes"/>
     </div>
   </div>
 </template>
 
 <script>
-import PredictResult from "@/components/PredictResult.vue";
+import PredictResult from "@/components/PredictResult.vue"
 import axios from 'axios'
 import jQuery from 'jquery'
 
@@ -52,8 +52,8 @@ export default {
         headers: {'Content-Type': 'multipart/form-data'}
       })
         .then((res) => {
-          // 여기서 imageBytes에 json 파싱해서 images 값들 저장해야
-          var result = jQuery.parseJSON(res.data);
+          // 여기서 imageBytes에 json 파싱해서 images 값들 저장
+          let result = jQuery.parseJSON(res.data);
           this.imageBytes.push(result.images);
           console.log(this.imageBytes[0][0]);
           console.log(res);

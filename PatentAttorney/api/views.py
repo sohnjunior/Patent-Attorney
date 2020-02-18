@@ -18,11 +18,12 @@ class ApiPatentList(View):
     pass
 
 
-# -- 특허 이미지 유사도 분석 결과 반환  # TODO 결과 이미지 개수 파리미터화
+# -- 특허 이미지 유사도 분석 결과 반환
 class ApiPatentPredict(View):
 
     def post(self, request, *args, **kwargs):
         result = predict(request.FILES['file'], 5)
+        print(request.POST['count']) # TODO count값이 올바르게 출력되어야 함
 
         # static folder 에 이미지 데이터 구성해놓고 결과 이미지 로드해서 반환해주기
         img_binary = []
