@@ -6,7 +6,6 @@
           <v-file-input v-model="file" label="Select Image File"  @change="handleFileUpload" outlined dense></v-file-input>
         </v-col>
         <v-col cols="15" md="10">
-<<<<<<< HEAD
           <v-select
             :items="count"
             v-model="selected"
@@ -14,9 +13,6 @@
             outlined
             @click="handleCountload">
           </v-select>
-=======
-          <v-select v-model="count" :items="count" label="Count" required @change="handleCountload"></v-select>
->>>>>>> 2a709debedfb4ead4f2bf58cadf215d928ac0fb9
         </v-col>
         <v-col cols="15" md="10">
           <v-btn class="ma-2" outlined color="indigo" type="submit" @click="submitFile">제출</v-btn>
@@ -24,7 +20,8 @@
       </v-row>
     </div>
         <hr>
-        <!--    받아온 이미지 데이터 출력하는 부분 - 수정 필요 -->
+
+    <!--    받아온 이미지 데이터 출력하는 컴포넌트 -->
     <div v-if="flag">
       <PredictResult v-bind:images="imageBytes"/>
     </div>
@@ -66,9 +63,9 @@ export default {
           // 여기서 imageBytes에 json 파싱해서 images 값들 저장
           let result = jQuery.parseJSON(res.data);
           this.imageBytes.push(result.images);
-          console.log(this.imageBytes[0][0]);
-          console.log(this.selected);
-          console.log(res);
+          // console.log(this.imageBytes[0][0]);
+          // console.log(this.selected);
+          // console.log(res);
           this.flag = true;
         })
         .catch((err) => {
@@ -84,7 +81,6 @@ export default {
 
   }
 }
-
 </script>
 
 <style scoped>

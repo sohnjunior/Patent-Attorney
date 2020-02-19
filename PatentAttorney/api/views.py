@@ -22,8 +22,8 @@ class ApiPatentList(View):
 class ApiPatentPredict(View):
 
     def post(self, request, *args, **kwargs):
-        result = predict(request.FILES['file'], 5)
-        print(request.POST['count']) # TODO count값이 올바르게 출력되어야 함
+        request_num = int(request.POST['selected'])  # 사용자가 요청한 유사 이미지 개수
+        result = predict(request.FILES['file'], request_num)
 
         # static folder 에 이미지 데이터 구성해놓고 결과 이미지 로드해서 반환해주기
         img_binary = []
@@ -38,7 +38,7 @@ class ApiPatentPredict(View):
             img_binary.append(img_str)
 
         # response object
-        res = {"request_num": 5,
+        res = {"request_num": request_num,
                "images": img_binary}
 
         return JsonResponse(data=json.dumps(res), status=200, safe=False)
