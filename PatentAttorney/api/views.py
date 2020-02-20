@@ -13,8 +13,8 @@ import os
 STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 
 
-# -- 등록된 특허 정보 반환
-class ApiPatentList(View):
+# -- 상품 출원번호 기반으로 등록된 특허 정보 반환 # TODO
+class ApiPatentDetail(View):
     pass
 
 
@@ -23,13 +23,16 @@ class ApiPatentPredict(View):
 
     def post(self, request, *args, **kwargs):
         request_num = int(request.POST['selected'])  # 사용자가 요청한 유사 이미지 개수
-        result = predict(request.FILES['file'], request_num)
+        query_image = request.FILES['file']  # 사용자가 입력한 이미지
+
+        # deep ranking
+        result = predict(query_image, request_num)
 
         # static folder 에 이미지 데이터 구성해놓고 결과 이미지 로드해서 반환해주기
         img_binary = []
         for info in result:
             img_path = os.path.join(STATIC_PATH, info[1])
-            raw_image = Image.open(img_path).convert('RGB')  # gray scale 로 읽히는 이미지들이 있어서 RGB로 바꿔줌
+            raw_image = Image.open(img_path).convert('RGB')  # gray scale 로 읽히는 이미지들이 있어서 RGB 형식으로 바꿔줌
 
             # convert PIL image to base64 string
             buffer = BytesIO()
@@ -37,8 +40,9 @@ class ApiPatentPredict(View):
             img_str = base64.b64encode(buffer.getvalue()).decode('ascii')
             img_binary.append(img_str)
 
-        # response object
+        # response object TODO 상품 출원번호
         res = {"request_num": request_num,
+               "request_image": query_image,
                "images": img_binary}
 
         return JsonResponse(data=json.dumps(res), status=200, safe=False)
