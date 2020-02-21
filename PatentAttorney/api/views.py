@@ -18,12 +18,21 @@ class ApiPatentDetail(View):
     pass
 
 
-# -- PIL image to base64 data
 def base64_encoder(image):
+    """ PIL image to base64 data """
     buffer = BytesIO()
     image.save(buffer, format='JPEG')
     img_str = base64.b64encode(buffer.getvalue()).decode('ascii')
     return img_str
+
+
+def parse_application_number(path):
+    """ parse the application number """
+    parsed = path.split('/')[3].split('.')[0]
+    # if it contains 'M' in application number, remove after M
+    if parsed.find('M') != -1:
+        parsed = parsed.split('M')[0]
+    return parsed
 
 
 # -- 특허 이미지 유사도 분석 결과 반환
@@ -37,10 +46,17 @@ class ApiPatentPredict(View):
         result = predict(query_image, request_num)
 
         # static folder 에 이미지 데이터 구성해놓고 결과 이미지 로드해서 반환해주기
+        app_nums = []
         img_binary = []
         for info in result:
             img_path = os.path.join(STATIC_PATH, info[1])
-            raw_image = Image.open(img_path).convert('RGB')  # gray scale 로 읽히는 이미지들이 있어서 RGB 형식으로 바꿔줌
+
+            # info[1] format: patent_image/train/닭/4020020037823.jpg
+            app_num = parse_application_number(info[1])
+            app_nums.append(app_num)
+
+            # gray scale 로 읽히는 이미지들이 있어서 RGB 형식으로 바꿔줌
+            raw_image = Image.open(img_path).convert('RGB')
 
             # convert PIL image to base64 string
             img_str = base64_encoder(raw_image)
@@ -50,10 +66,13 @@ class ApiPatentPredict(View):
         raw_image = Image.open(query_image).convert('RGB')
         query_image_base64 = base64_encoder(raw_image)
 
-        # response object TODO 상품 출원번호
-        res = {"request_num": request_num,
-               "request_image": query_image_base64,
-               "images": img_binary}
+        # response object
+        res = {
+            "request_num": request_num,
+            "request_image": query_image_base64,
+            "images": img_binary,
+            "result_app_numbers": app_nums
+        }
 
         return JsonResponse(data=json.dumps(res), status=200, safe=False)
 
