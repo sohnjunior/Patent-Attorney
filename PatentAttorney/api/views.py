@@ -18,6 +18,14 @@ class ApiPatentDetail(View):
     pass
 
 
+# -- PIL image to base64 data
+def base64_encoder(image):
+    buffer = BytesIO()
+    image.save(buffer, format='JPEG')
+    img_str = base64.b64encode(buffer.getvalue()).decode('ascii')
+    return img_str
+
+
 # -- 특허 이미지 유사도 분석 결과 반환
 class ApiPatentPredict(View):
 
@@ -35,14 +43,16 @@ class ApiPatentPredict(View):
             raw_image = Image.open(img_path).convert('RGB')  # gray scale 로 읽히는 이미지들이 있어서 RGB 형식으로 바꿔줌
 
             # convert PIL image to base64 string
-            buffer = BytesIO()
-            raw_image.save(buffer, format='JPEG')
-            img_str = base64.b64encode(buffer.getvalue()).decode('ascii')
+            img_str = base64_encoder(raw_image)
             img_binary.append(img_str)
+
+        # encoding request image to base64
+        raw_image = Image.open(query_image).convert('RGB')
+        query_image_base64 = base64_encoder(raw_image)
 
         # response object TODO 상품 출원번호
         res = {"request_num": request_num,
-               "request_image": query_image,
+               "request_image": query_image_base64,
                "images": img_binary}
 
         return JsonResponse(data=json.dumps(res), status=200, safe=False)
