@@ -9,13 +9,19 @@ from PIL import Image
 import json
 import os
 
+from .utils import request_open_api
 
 STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 
 
 # -- 상품 출원번호 기반으로 등록된 특허 정보 반환 # TODO
 class ApiPatentDetail(View):
-    pass
+
+    def get(self, request, *args, **kwargs):
+        query_app_num = '4020190047673'  # query application number
+        parsed_data = request_open_api(application_number=query_app_num)
+        print(parsed_data)
+        return JsonResponse({'success': parsed_data})
 
 
 def base64_encoder(image):
