@@ -9,7 +9,7 @@ from PIL import Image
 import json
 import os
 
-from .utils import request_open_api
+from .utils import request_open_api, base64_encoder, parse_application_number
 
 STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 
@@ -22,23 +22,6 @@ class ApiPatentDetail(View):
         parsed_data = request_open_api(application_number=query_app_num)
         print(parsed_data)
         return JsonResponse({'success': parsed_data})
-
-
-def base64_encoder(image):
-    """ PIL image to base64 data """
-    buffer = BytesIO()
-    image.save(buffer, format='JPEG')
-    img_str = base64.b64encode(buffer.getvalue()).decode('ascii')
-    return img_str
-
-
-def parse_application_number(path):
-    """ parse the application number """
-    parsed = path.split('/')[3].split('.')[0]
-    # if it contains 'M' in application number, remove after M
-    if parsed.find('M') != -1:
-        parsed = parsed.split('M')[0]
-    return parsed
 
 
 # -- 특허 이미지 유사도 분석 결과 반환
