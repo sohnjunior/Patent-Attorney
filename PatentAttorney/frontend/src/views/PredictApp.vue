@@ -2,16 +2,8 @@
   <div class="App">
     <div v-if="!flag">
 
-      <v-row
-        align="center"
-        class="black--text mx-auto"
-        justify="center"
-      >
-          <v-col
-            class="black--text text-center"
-            cols="12"
-            tag="h1"
-          >
+      <v-row align="center" class="black--text mx-auto" justify="center">
+          <v-col class="black--text text-center" cols="12" tag="h1">
             <span class="font-weight-black">
               ImagePredict Service
             </span>
@@ -27,7 +19,6 @@
 
           </v-col>
       </v-row>
-
 
     <div class="py-3"/>
       <v-row>
@@ -64,16 +55,8 @@
     <!--    받아온 이미지 데이터 출력하는 컴포넌트 -->
     <div v-if="flag">
       <v-container fill-height color="black">
-      <v-row
-        align="start"
-        class="white--text mx-auto"
-        justify="center"
-      >
-          <v-col
-            class="white--text text-center"
-            cols="12"
-            tag="h1"
-          >
+      <v-row align="start" class="white--text mx-auto" justify="center">
+          <v-col class="white--text text-center" cols="12" tag="h1">
             <span class="font-weight-light">
               Result
             </span>
@@ -129,11 +112,7 @@ export default {
           this.imageBytes.push(result.request_image);
           this.imageBytes.push(result.images);
           this.imageBytes.push(result.result_app_numbers);
-          console.log(this.imageBytes[0]);
-          console.log(this.imageBytes[1]);
-          console.log(this.imageBytes[2]);
-          // console.log(this.selected);
-          // console.log(res);
+
           this.flag = true;
         })
         .catch((err) => {

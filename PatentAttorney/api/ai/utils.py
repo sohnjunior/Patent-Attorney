@@ -42,7 +42,7 @@ def query_embedding(model, query_image_path):
 
 def predict(query_image, result_num):
     model = DeepRank()
-    model.load_state_dict(torch.load(MODEL_PATH,map_location=torch.device('cpu')))  # load model parameters
+    model.load_state_dict(torch.load(MODEL_PATH, map_location=torch.device('cpu')))  # load model parameters
 
     train_df = pd.read_csv(TRIPLET_PATH)
     train_embedded = np.fromfile(EMBEDDING_PATH, dtype=np.float32).reshape(-1, 4096)

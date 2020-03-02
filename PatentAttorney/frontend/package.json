@@ -13,6 +13,7 @@
     "bootstrap-vue": "^2.4.1",
     "core-js": "^3.6.4",
     "jquery": "^3.4.1",
+    "material-design-icons": "^3.0.1",
     "material-design-icons-iconfont": "^5.0.1",
     "portal-vue": "^2.1.7",
     "vue": "^2.6.11",

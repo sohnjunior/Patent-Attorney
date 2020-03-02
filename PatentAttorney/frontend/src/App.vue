@@ -1,13 +1,8 @@
 <template>
   <v-app id = "app">
-    <v-app-bar
-      app
-      color="indigo"
-      dark
-    >
+    <v-app-bar app color="indigo" dark >
       <v-toolbar-title>
-        <router-link
-          to="/">
+        <router-link to="/">
           <v-icon>home</v-icon>
         </router-link>
         ImagePredict Service
@@ -17,15 +12,12 @@
     <v-content>
       <v-container>
 
-            <router-view/>
+        <router-view/>
 
       </v-container>
     </v-content>
-    <v-footer
-      color="indigo"
-      app
-    >
-      <span class="white--text">&copy; 2019</span>
+    <v-footer color="indigo" app >
+      <span class="white--text">&copy; 2019 KWU</span>
     </v-footer>
   </v-app>
 </template>
