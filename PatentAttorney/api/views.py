@@ -18,7 +18,7 @@ STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 class ApiPatentDetail(View):
 
     def get(self, request, *args, **kwargs):
-        query_app_num = '4020190047673'  # query application number
+        query_app_num = '4020190047673'  # query application number, 넘겨오는 인자로 바꿔 해결
         parsed_data = request_open_api(application_number=query_app_num)
         print(parsed_data)
         return JsonResponse({'success': parsed_data})

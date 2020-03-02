@@ -6,23 +6,19 @@
       dark
     >
       <v-toolbar-title>
+        <router-link
+          to="/">
+          <v-icon>home</v-icon>
+        </router-link>
         ImagePredict Service
       </v-toolbar-title>
     </v-app-bar>
 
     <v-content>
-      <v-container
-        class="fill-height"
-        fluid
-      >
-        <v-row
-          align="center"
-          justify="center"
-        >
-          <v-col class="text-center">
+      <v-container>
+
             <router-view/>
-          </v-col>
-        </v-row>
+
       </v-container>
     </v-content>
     <v-footer
