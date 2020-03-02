@@ -43,6 +43,7 @@
               slot-scope="{ headers }"
             >
 
+<<<<<<< HEAD
             </template>
             <template v-slot:item.temp="{items}" >
               <td>
@@ -57,6 +58,17 @@
             </template>
           </v-data-table>
         </v-card>
+=======
+    <v-card v-for="image in images[0]" class="d-inline-block mx-auto" v-bind:key="image">
+      <v-container>
+        <v-row justify="space-between">
+          <v-col cols="auto">
+            <v-img :src="`data:image/jpeg;base64,${image}`" width="300" height="auto"></v-img>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card>
+>>>>>>> a9eb4b40bf48759dc892a23b28f96c0938900e2a
 
       </v-flex>
     </v-layout>
