@@ -22,8 +22,6 @@
 <script>
 import { requestImagePrediction } from '../api/index';
 
-import jQuery from 'jquery';
-
 export default {
   data() {
     return {
@@ -55,7 +53,7 @@ export default {
         const response = await requestImagePrediction(formData);
         
         // JSON 파싱한 후 필요한 정보들 store에 저장
-        const result = jQuery.parseJSON(response.data);
+        const result = JSON.parse(response.data);
         this.$store.commit('setRequestImage', { imageData: result.request_image });
         this.$store.commit('setResultImages', { imageData: result.images });
         this.$store.commit('setResultAppNum', { appNumbers: result.result_app_numbers });
