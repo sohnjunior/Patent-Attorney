@@ -6,7 +6,6 @@ import PredictPage from "../views/PredictPage.vue";
 Vue.use(VueRouter)
 
 const router = new VueRouter({
-  mode: 'history',
   routes: [
     {
       path: '/',
