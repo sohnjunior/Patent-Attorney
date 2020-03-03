@@ -11,7 +11,7 @@
         </v-card>
       </v-flex>
       <v-flex xs12 md8 >
-        <v-card>
+        <!-- <v-card>
           <v-card-title> Result </v-card-title>
           <v-data-table :headers="headers" :items="items" class="text-no-wrap">
             <template slot="headerCell" slot-scope="{ headers }"></template>
@@ -28,7 +28,7 @@
               <td></td>
             </template>
           </v-data-table>
-        </v-card>
+        </v-card> -->
 
       </v-flex>
     </v-layout>
@@ -38,7 +38,6 @@
 
 <script>
 export default {
-  name: 'PredictResult',
   props:['images'],
   data(){
     return{
