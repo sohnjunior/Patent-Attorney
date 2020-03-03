@@ -1,19 +1,24 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import PredictApp from "../views/PredictApp.vue";
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import HomePage from '../views/HomePage.vue';
+import PredictPage from "../views/PredictPage.vue";
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
-    path: '/',
-    name: 'PredictApp',
-    component: PredictApp
-  },
-]
-
 const router = new VueRouter({
-  routes
+  mode: 'history',
+  routes: [
+    {
+      path: '/',
+      name: 'Home',
+      component: HomePage
+    },
+    {
+      path: '/predict',
+      name: 'predict',
+      component: PredictPage
+    }
+  ]
 })
 
 export default router
