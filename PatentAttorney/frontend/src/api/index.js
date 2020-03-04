@@ -9,4 +9,16 @@ function requestImagePrediction(formData) {
   });
 }
 
-export { requestImagePrediction }
+function requestMarkInfo(appNum) {
+  return axios.get("/api/patent_image/detail/", {
+    params: {
+      appnum: appNum
+    }
+  });
+}
+
+function requestDesignInfo() {
+  return null;
+}
+
+export { requestImagePrediction, requestMarkInfo, requestDesignInfo }

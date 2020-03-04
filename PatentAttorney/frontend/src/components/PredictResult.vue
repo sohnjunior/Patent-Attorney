@@ -17,7 +17,7 @@
             </template>
           </v-data-table>
           <div class="text-xs-center pt-2">
-            <v-pagination v-model="page" :length="pageCount"></v-pagination>
+            <v-pagination v-model="page" :length="pageCount" circle></v-pagination>
           </div>
         </v-flex>
       
@@ -31,7 +31,7 @@ export default {
   data(){
     return {
       page: 1,
-      pageCount: 3,
+      pageCount: 0,
       itemsPerPage: 5,
       headers:[
         { text:'상표이미지', value:'imageData' },
@@ -67,6 +67,9 @@ export default {
       }
       this.items.push(obj);
     }
+
+    // set page count
+    this.pageCount = Math.ceil(this.resultImages.length / this.itemsPerPage);
   }
 }
 </script>

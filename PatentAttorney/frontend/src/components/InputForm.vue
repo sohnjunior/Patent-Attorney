@@ -50,6 +50,8 @@ export default {
       
       try {
         this.submit_flag=true;
+
+        // 결과 이미지들 요청
         const response = await requestImagePrediction(formData);
         
         // JSON 파싱한 후 필요한 정보들 store에 저장

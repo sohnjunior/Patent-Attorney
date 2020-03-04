@@ -14,19 +14,21 @@ from .utils import request_open_api, base64_encoder, parse_application_number
 STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 
 
-# -- 상품 출원번호 기반으로 등록된 특허 정보 반환 # TODO
 class ApiPatentDetail(View):
-
+    """
+    상표 출원번호를 기준으로 등록된 특허 정보 반환
+    """
     def get(self, request, *args, **kwargs):
         query_app_num = '4020190047673'  # query application number, 넘겨오는 인자로 바꿔 해결
         parsed_data = request_open_api(application_number=query_app_num)
-        print(parsed_data)
-        return JsonResponse({'success': parsed_data})
+
+        return JsonResponse(data=json.dumps(parsed_data), status=200, safe=False)
 
 
-# -- 특허 이미지 유사도 분석 결과 반환
 class ApiPatentPredict(View):
-
+    """
+    특허청에 등록된 이미지들을 기반으로 유사도 분석 결과 반환
+    """
     def post(self, request, *args, **kwargs):
         request_num = int(request.POST['selected'])  # 사용자가 요청한 유사 이미지 개수
         query_image = request.FILES['file']  # 사용자가 입력한 이미지
