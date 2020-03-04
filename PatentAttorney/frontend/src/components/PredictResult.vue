@@ -11,13 +11,13 @@
         </v-flex>
 
         <v-flex xs12 md8>
-          <v-data-table :headers="headers" :items="items" :pagination.sync="pagination" hide-actions class="elevation-1">
-            <template v-slot:item.image="{ item }">
+          <v-data-table :headers="headers" :items="items" :page.sync="page" :items-per-page="itemsPerPage" hide-default-footer class="elevation-1">
+            <template v-slot:item.imageData="{ item }">
               <v-img :src="`data:image/jpeg;base64,${item.imageData}`" class="result-image"></v-img>
             </template>
           </v-data-table>
           <div class="text-xs-center pt-2">
-            <v-pagination v-model="pagination.page" :length="pages"></v-pagination>
+            <v-pagination v-model="page" :length="pageCount"></v-pagination>
           </div>
         </v-flex>
       
@@ -30,7 +30,9 @@
 export default {
   data(){
     return {
-      pagination: {},
+      page: 1,
+      pageCount: 3,
+      itemsPerPage: 5,
       headers:[
         { text:'상표이미지', value:'imageData' },
         { text:'상표명', value:'title' },
@@ -50,13 +52,6 @@ export default {
     resultImages() {
       return this.$store.getters.getResultImages;
     },
-    pages () {
-        if (this.pagination.rowsPerPage == null ||
-          this.pagination.totalItems == null
-        ) return 0;
-
-        return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
-      },
   },
   created() {
     // initialize items
@@ -82,7 +77,7 @@ export default {
   width: 200px;
 }
 .result-image {
-  height:auto;
-  width:200px;
+  height: auto;
+  width: 200px;
 }
 </style>

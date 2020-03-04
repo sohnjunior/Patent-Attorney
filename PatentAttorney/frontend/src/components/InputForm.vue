@@ -26,7 +26,7 @@ export default {
   data() {
     return {
       inputFile: null,
-      selected: 3, // TODO
+      selected: 5, // TODO
       submit_flag: false,
       items: [1, 2, 3, 4, 5], // TODO
     }
