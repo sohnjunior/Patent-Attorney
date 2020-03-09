@@ -79,6 +79,7 @@ export default {
         
         // JSON 파싱한 후 필요한 정보들 store에 저장
         const result = JSON.parse(response.data);
+        this.$store.commit('setResultCount', { resultCount: result.request_num });
         this.$store.commit('setRequestImage', { imageData: result.request_image });
         this.$store.commit('setResultImages', { imageData: result.images });
         this.$store.commit('setResultAppNum', { appNumbers: result.result_app_numbers });

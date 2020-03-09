@@ -4,9 +4,12 @@
     
     <v-content>
       <v-container>
-        <h1>조회 결과</h1>        
+        <h1>조회 결과</h1>  
+      </v-container> 
+      <hr>
+      <v-container>
+        <PredictResult></PredictResult>
       </v-container>
-      <PredictResult></PredictResult>
     </v-content>
   </div>
 </template>
@@ -21,6 +24,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+hr {
+  width: 80%;
+  margin: 0 auto;
+}
 </style>

@@ -19,7 +19,7 @@ class ApiPatentDetail(View):
     상표 출원번호를 기준으로 등록된 특허 정보 반환
     """
     def get(self, request, *args, **kwargs):
-        query_app_num = '4020190047673'  # query application number, 넘겨오는 인자로 바꿔 해결
+        query_app_num = request.GET['appnum']  # query application number
         parsed_data = request_open_api(application_number=query_app_num)
 
         return JsonResponse(data=json.dumps(parsed_data), status=200, safe=False)

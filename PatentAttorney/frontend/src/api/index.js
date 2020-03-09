@@ -10,7 +10,7 @@ function requestImagePrediction(formData) {
 }
 
 function requestMarkInfo(appNum) {
-  return axios.get("/api/patent_image/detail/", {
+  return axios.get("/api/patent_image/detail", {
     params: {
       appnum: appNum
     }
