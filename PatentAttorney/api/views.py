@@ -14,26 +14,34 @@ from .utils import request_open_api, base64_encoder, parse_application_number
 STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 
 
-class ApiPatentDetail(View):
+class MarkInfo(View):
     """
     상표 출원번호를 기준으로 등록된 특허 정보 반환
     """
     def get(self, request, *args, **kwargs):
-        query_app_num = '4020190047673'  # query application number, 넘겨오는 인자로 바꿔 해결
+        query_app_num = request.GET['appnum']  # query application number
         parsed_data = request_open_api(application_number=query_app_num)
 
         return JsonResponse(data=json.dumps(parsed_data), status=200, safe=False)
 
 
-class ApiPatentPredict(View):
+class DesignInfo(View):
+    """
+    디자인 출원번호를 기준으로 등록된 디자인 정보 반환
+    """
+    pass
+
+
+class PatentPredict(View):
     """
     특허청에 등록된 이미지들을 기반으로 유사도 분석 결과 반환
     """
     def post(self, request, *args, **kwargs):
-        request_num = int(request.POST['selected'])  # 사용자가 요청한 유사 이미지 개수
-        query_image = request.FILES['file']  # 사용자가 입력한 이미지
+        search_type = int(request.POST['searchType'])  # 요청 타입 (0: 상표 1: 디자인)
+        request_num = int(request.POST['selected'])  # 요청한 유사 이미지 개수
+        query_image = request.FILES['file']  # 요청 이미지
 
-        # deep ranking
+        # deep ranking TODO search type 에 따라 object detection 수행
         result = predict(query_image, request_num)
 
         # static folder 에 이미지 데이터 구성해놓고 결과 이미지 로드해서 반환해주기

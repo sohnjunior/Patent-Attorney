@@ -4,9 +4,12 @@ from . import views
 
 app_name = 'api'
 urlpatterns = [
-    # /api/patent_image/detail
-    path('patent_image/detail/', views.ApiPatentDetail.as_view(), name='patent_detail'),
+    # /api/patent/predict
+    path('patent/predict/', views.PatentPredict.as_view(), name='patent_predict'),
 
-    # /api/patent_image/predict
-    path('patent_image/predict/', views.ApiPatentPredict.as_view(), name='patent_predict'),
+    # /api/mark/detail
+    path('mark/detail/', views.MarkInfo.as_view(), name='mark_info'),
+
+    # /api/design/detail
+    path('design/detail/', views.DesignInfo.as_view(), name='design_info'),
 ]

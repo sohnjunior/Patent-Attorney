@@ -1,34 +1,64 @@
 <template>
   <div>
-    <v-row>
-      <v-col>
-        <v-file-input v-model="inputFile" label="요청 이미지 선택" outlined dense></v-file-input>
-      </v-col>
-      <v-col>
-        <v-select v-model="selected" :items="items" label="결과 이미지 개수" outlined></v-select>
-      </v-col>
-      <v-col>
-        <div v-if="!submit_flag">
-          <v-btn class="ma-2" outlined color="indigo" type="submit" @click="submitFile" >결과 보기</v-btn>
+    <v-container>
+      <vue2Dropzone id="dropzone" 
+        :options="dropzoneOptions" 
+        :useCustomSlot="true"
+        @vdropzone-file-added="fileAdded">
+        <div class="dropzone-custom-content">
+          <h3 class="dropzone-custom-title">Drag and drop to upload content!</h3>
+          <div class="subtitle">...or click to select a file from your computer</div>
         </div>
-        <div v-else>
-          <v-progress-circular indeterminate :rotate="20" :size="40" :width="5" color="light-blue"></v-progress-circular>
-        </div>
-      </v-col>
-    </v-row>
+      </vue2Dropzone>
+    </v-container>
+
+    <v-container>
+      <div>
+        <v-select v-model="selected" :items="items" label="결과 이미지 개수"></v-select>
+      
+        <v-btn-toggle v-model="toggled">
+          <v-btn>
+            상표
+          </v-btn>
+          <v-btn>
+            디자인
+          </v-btn>
+        </v-btn-toggle>
+      </div>
+      <br>
+
+      <div v-if="!submit_flag">
+        <v-btn id="submit-button" outlined color="indigo" type="submit" @click="submitFile" >검색</v-btn>
+      </div>
+      <div v-else>
+        <v-progress-circular indeterminate :rotate="20" :size="40" :width="5" color="light-blue"></v-progress-circular>
+      </div>
+    </v-container>
+
   </div>
 </template>
 
 <script>
+import vue2Dropzone from 'vue2-dropzone';
 import { requestImagePrediction } from '../api/index';
 
 export default {
+  components: { vue2Dropzone },
   data() {
     return {
       inputFile: null,
-      selected: 5, // TODO
       submit_flag: false,
+      selected: 5, // TODO
       items: [1, 2, 3, 4, 5], // TODO
+      toggled: 0,
+      dropzoneOptions: {
+        url: 'https://httpbin.org/post',
+        maxFiles: 5,
+        thumbnailWidth: 200,
+        addRemoveLinks: true,
+        dictRemoveFile: '파일 삭제',
+        dictCancelUpload: '업로드 취소',
+      }
     }
   },
   computed: {
@@ -37,6 +67,9 @@ export default {
     }
   },
   methods: {
+    fileAdded(file) {
+      this.inputFile = file;
+    },
     async submitFile() {
       // check file existance
       if(!this.fileRegistered) {
@@ -47,6 +80,7 @@ export default {
       let formData = new FormData();
       formData.append('file', this.inputFile);
       formData.append('selected', this.selected);
+      formData.append('searchType', this.toggled);
       
       try {
         this.submit_flag=true;
@@ -56,10 +90,18 @@ export default {
         
         // JSON 파싱한 후 필요한 정보들 store에 저장
         const result = JSON.parse(response.data);
+        this.$store.commit('setResultCount', { resultCount: result.request_num });
         this.$store.commit('setRequestImage', { imageData: result.request_image });
         this.$store.commit('setResultImages', { imageData: result.images });
         this.$store.commit('setResultAppNum', { appNumbers: result.result_app_numbers });
         
+        // 결과 이미지들의 특허 정보 호출
+        if(this.toggled === 0) {
+          this.$store.dispatch('getMarkInfo');
+        } else {
+          this.$store.dispatch('getDesignInfo');
+        }
+
         // 라우터로 predict 페이지로 이동
         this.$router.push({name: 'predict'});
       } catch(error) {
@@ -70,6 +112,16 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+#dropzone {
+  width: 65%;
+  margin: 0 auto;
+}
+#select-count {
+  width: 10%;
+}
+#submit-button {
+  width: 10rem;
+  height: 3rem;
+}
 </style>
