@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { requestMarkInfo } from '../api/index';
+import { requestMarkInfo, requestDesignInfo } from '../api/index';
 
 Vue.use(Vuex)
 
@@ -44,7 +44,7 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    async getMarkInfo({commit, state}) {
+    async getMarkInfo({ commit, state }) {
       var patentInfos = new Array();
       for(var appNum of state.resultAppNumbers) {
         const response = await requestMarkInfo(appNum);
@@ -54,6 +54,17 @@ export default new Vuex.Store({
       }
 
       commit('setResultPatentInfo', { patentInfos });
-    }
+    },
+    async getDesignInfo({ commit, state }) {
+      var patentInfos = new Array();
+      for (var appNum of state.resultAppNumbers) {
+        const response = await requestDesignInfo(appNum);
+
+        const result = JSON.parse(response.data);
+        patentInfos.push(result);
+      }
+
+      commit('setResultPatentInfo', { patentInfos });
+    },
   },
 })

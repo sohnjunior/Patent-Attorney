@@ -13,19 +13,28 @@
     </v-container>
 
     <v-container>
-      <div id="select-count" class="submit-buttons">
-        <v-select v-model="selected" :items="items" label="결과 이미지 개수" outlined></v-select>
-      </div>
+      <div>
+        <v-select v-model="selected" :items="items" label="결과 이미지 개수"></v-select>
       
-      <div class="submit-buttons" id="submit-button">
-        <div v-if="!submit_flag">
-          <v-btn class="ma-2" outlined color="indigo" type="submit" @click="submitFile" >결과 보기</v-btn>
-        </div>
-        <div v-else>
-          <v-progress-circular indeterminate :rotate="20" :size="40" :width="5" color="light-blue"></v-progress-circular>
-        </div>
+        <v-btn-toggle v-model="toggled">
+          <v-btn>
+            상표
+          </v-btn>
+          <v-btn>
+            디자인
+          </v-btn>
+        </v-btn-toggle>
+      </div>
+      <br>
+
+      <div v-if="!submit_flag">
+        <v-btn id="submit-button" outlined color="indigo" type="submit" @click="submitFile" >검색</v-btn>
+      </div>
+      <div v-else>
+        <v-progress-circular indeterminate :rotate="20" :size="40" :width="5" color="light-blue"></v-progress-circular>
       </div>
     </v-container>
+
   </div>
 </template>
 
@@ -38,9 +47,10 @@ export default {
   data() {
     return {
       inputFile: null,
-      selected: 5, // TODO
       submit_flag: false,
+      selected: 5, // TODO
       items: [1, 2, 3, 4, 5], // TODO
+      toggled: 0,
       dropzoneOptions: {
         url: 'https://httpbin.org/post',
         maxFiles: 5,
@@ -70,6 +80,7 @@ export default {
       let formData = new FormData();
       formData.append('file', this.inputFile);
       formData.append('selected', this.selected);
+      formData.append('searchType', this.toggled);
       
       try {
         this.submit_flag=true;
@@ -85,7 +96,11 @@ export default {
         this.$store.commit('setResultAppNum', { appNumbers: result.result_app_numbers });
         
         // 결과 이미지들의 특허 정보 호출
-        this.$store.dispatch('getMarkInfo');
+        if(this.toggled === 0) {
+          this.$store.dispatch('getMarkInfo');
+        } else {
+          this.$store.dispatch('getDesignInfo');
+        }
 
         // 라우터로 predict 페이지로 이동
         this.$router.push({name: 'predict'});
@@ -102,13 +117,11 @@ export default {
   width: 65%;
   margin: 0 auto;
 }
-.submit-buttons {
-  margin: 0 auto;
-}
 #select-count {
   width: 10%;
 }
 #submit-button {
-  width: 10%;
+  width: 10rem;
+  height: 3rem;
 }
 </style>
