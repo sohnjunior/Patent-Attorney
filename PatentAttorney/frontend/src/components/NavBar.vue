@@ -1,7 +1,8 @@
 <template>
-  <v-app-bar app color="indigo" dark>
-    <v-app-bar-nav-icon/>
-    <v-toolbar-title>ImagePredict Service</v-toolbar-title>
+  <v-app-bar class="nav" app flat="true">
+    <router-link to="/">
+      <v-toolbar-title>ImagePredict Service</v-toolbar-title>
+    </router-link>
   </v-app-bar>
 </template>
 
@@ -9,6 +10,10 @@
 export default {}
 </script>
 
-<style>
-
+<style scoped>
+.nav{
+  background-color: transparent;
+}
 </style>
+
+
