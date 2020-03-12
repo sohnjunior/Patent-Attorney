@@ -1,6 +1,10 @@
 <template>
-  <v-footer color="indigo" app>
-    <span class="white--text">&copy; 2019</span>
+  <v-footer height="auto" class="blue lighten-2" app>
+    <v-col class="text-center pt-0">
+      <span class="white--text">손정현 박민춘 홍종현</span>
+      <br>
+      <span class="white--text">&copy; 2020</span>
+    </v-col>
   </v-footer>
 </template>
 

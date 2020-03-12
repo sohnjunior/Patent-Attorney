@@ -1,41 +1,44 @@
 <template>
-  <div>
-    <v-container>
-      <vue2Dropzone id="dropzone" 
-        :options="dropzoneOptions" 
-        :useCustomSlot="true"
-        @vdropzone-file-added="fileAdded">
-        <div class="dropzone-custom-content">
-          <h3 class="dropzone-custom-title">Drag and drop to upload content!</h3>
-          <div class="subtitle">...or click to select a file from your computer</div>
+    <div>
+      <v-container>
+        <vue2Dropzone id="dropzone"
+          :options="dropzoneOptions"
+          :useCustomSlot="true"
+          @vdropzone-file-added="fileAdded">
+          <div class="dropzone-custom-content">
+            <h3 class="dropzone-custom-title">Drag and drop to upload content!</h3>
+            <div class="subtitle">...or click to select a file from your computer</div>
+          </div>
+        </vue2Dropzone>
+      </v-container>
+
+      <v-container>
+        <v-low align="center">
+          <div>
+            <v-btn-toggle v-model="toggled">
+              <v-btn>
+                상표
+              </v-btn>
+              <v-btn>
+                디자인
+              </v-btn>
+            </v-btn-toggle>
+          </div>
+        </v-low>
+      </v-container>
+
+      <v-container>
+        <v-low align="center">
+        <div v-if="!submit_flag">
+          <v-btn id="submit-button" outlined color="indigo" type="submit" @click="submitFile" >검색</v-btn>
         </div>
-      </vue2Dropzone>
-    </v-container>
+        <div v-else>
+          <v-progress-circular indeterminate :rotate="20" :size="40" :width="5" color="light-blue"></v-progress-circular>
+        </div>
+          </v-low>
+      </v-container>
 
-    <v-container>
-      <div>
-        <v-select v-model="selected" :items="items" label="결과 이미지 개수"></v-select>
-      
-        <v-btn-toggle v-model="toggled">
-          <v-btn>
-            상표
-          </v-btn>
-          <v-btn>
-            디자인
-          </v-btn>
-        </v-btn-toggle>
-      </div>
-      <br>
-
-      <div v-if="!submit_flag">
-        <v-btn id="submit-button" outlined color="indigo" type="submit" @click="submitFile" >검색</v-btn>
-      </div>
-      <div v-else>
-        <v-progress-circular indeterminate :rotate="20" :size="40" :width="5" color="light-blue"></v-progress-circular>
-      </div>
-    </v-container>
-
-  </div>
+    </div>
 </template>
 
 <script>
@@ -76,25 +79,25 @@ export default {
         alert('파일을 선택해주세요');
         return;
       }
-      
+
       let formData = new FormData();
       formData.append('file', this.inputFile);
       formData.append('selected', this.selected);
       formData.append('searchType', this.toggled);
-      
+
       try {
         this.submit_flag=true;
 
         // 결과 이미지들 요청
         const response = await requestImagePrediction(formData);
-        
+
         // JSON 파싱한 후 필요한 정보들 store에 저장
         const result = JSON.parse(response.data);
         this.$store.commit('setResultCount', { resultCount: result.request_num });
         this.$store.commit('setRequestImage', { imageData: result.request_image });
         this.$store.commit('setResultImages', { imageData: result.images });
         this.$store.commit('setResultAppNum', { appNumbers: result.result_app_numbers });
-        
+
         // 결과 이미지들의 특허 정보 호출
         if(this.toggled === 0) {
           this.$store.dispatch('getMarkInfo');
@@ -121,7 +124,7 @@ export default {
   width: 10%;
 }
 #submit-button {
-  width: 10rem;
+  width: 5rem;
   height: 3rem;
 }
 </style>

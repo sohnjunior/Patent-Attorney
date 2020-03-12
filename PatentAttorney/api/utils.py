@@ -51,7 +51,7 @@ def parse_xml(xml_string_data, category):
 
 def make_query_string(application_number):
     """ query string 생성 """
-    service_key = 'HC1X0Rp%2BrQOhhGVukHovgYtK178YRaCF%2BvCen1bu6SGsWFsIJavPYw78HC4ht69KeedxeIDCnLiKvzUuOIT5LA%3D%3D'
+    service_key = 'l8gBL3d0H0uEerbEKxYRva%2FQUSZQ3YXR9A9qGkFO7btByiwP09y2PfQc2Utg2cM%2FhChr3n44WtFPEJizwFrlwA%3D%3D'
     necessary = '?serviceKey=' + service_key + '&applicationNumber=' + application_number
     option = '&application=true&registration=true&refused=true' \
              '&expiration=true&refused=true&expiration=true&withdrawal=true' \
