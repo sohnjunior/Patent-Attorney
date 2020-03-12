@@ -99,11 +99,12 @@ export default {
         this.$store.commit('setResultAppNum', { appNumbers: result.result_app_numbers });
 
         // 결과 이미지들의 특허 정보 호출
-        if(this.toggled === 0) {
-          this.$store.dispatch('getMarkInfo');
-        } else {
-          this.$store.dispatch('getDesignInfo');
-        }
+        // if(this.toggled === 0) {
+        //   this.$store.dispatch('getMarkInfo');
+        // } else {
+        //   this.$store.dispatch('getDesignInfo');
+        // }
+        await this.$store.dispatch('getMarkInfo');
 
         // 라우터로 predict 페이지로 이동
         this.$router.push({name: 'predict'});

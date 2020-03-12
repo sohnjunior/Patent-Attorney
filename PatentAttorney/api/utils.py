@@ -31,20 +31,24 @@ def parse_xml(xml_string_data, category):
     """ xml 데이터를 파싱해서 필요한 데이터만 추출 """
     root = elemTree.fromstring(xml_string_data)
 
-    body = root.find('body')
-    item = body.find('items').find('item')
-
     # parsing result dictionary
     keys = set(category)
     parsed = dict.fromkeys(keys, '')
 
-    # iterate all tags
-    for child in item:
-        if child.tag in category:
-            if child.text:
-                parsed[child.tag] = child.text
-            else:
-                parsed[child.tag] = 'empty'
+    try:
+        body = root.find('body')
+        items = body.find('items')
+        item = items.find('item')
+
+        # iterate all tags
+        for child in item:
+            if child.tag in category:
+                if child.text:
+                    parsed[child.tag] = child.text
+                else:
+                    parsed[child.tag] = 'empty'
+    except Exception as e:
+        print('parsing xml error : ', e)
 
     return parsed
 
@@ -74,7 +78,7 @@ def request_open_api(application_number):
     req = urllib.request.Request(url + queryParams)
     response = urllib.request.urlopen(req)
     response_body = response.read()
-
+    print(application_number)
     # parse xml data
     # 상표명, 출원인이름, 대리인이름, 출원상태, 공고일자, 공고번호
     category = ['title', 'applicantName', 'agentName', 'applicationStatus', 'publicationDate', 'publicationNumber']
