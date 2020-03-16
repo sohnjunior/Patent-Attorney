@@ -31,6 +31,7 @@ class DesignInfo(View):
     """
     def get(self, request, *args, **kwargs):
         query_app_num = request.GET['appnum']  # query application number
+        print(query_app_num)
         parsed_data = request_open_api(application_number=query_app_num, mode=1)
 
         return JsonResponse(data=json.dumps(parsed_data), status=200, safe=False)

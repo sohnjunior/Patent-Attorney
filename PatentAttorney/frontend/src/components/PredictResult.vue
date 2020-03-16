@@ -66,7 +66,7 @@ export default {
     for(let idx = 0; idx < this.resultCount; idx++) {
       const obj = {
         imageData: this.resultImages[idx],
-        title: this.resultInfos[idx].title,
+        title: this.resultInfos[idx].title || this.resultInfos,
         applicationStatus: this.resultInfos[idx].applicationStatus,
         applicantName: this.resultInfos[idx].applicantName,
         agentName: this.resultInfos[idx].agentName,
