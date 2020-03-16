@@ -2,9 +2,25 @@ import base64
 from io import BytesIO
 from PIL import Image
 
+import os
+import json
 import platform
 import urllib.request
 import xml.etree.ElementTree as elemTree
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+with open(os.path.join(BASE_DIR, 'config/secrets.json')) as f:
+    secrets = json.load(f)
+
+
+def get_secret(setting, secrets=secrets):
+    """ OPEN API 키 추출 """
+    try:
+        return secrets[setting]
+    except KeyError:
+        error_msg = f'Set the {setting} env variable.'
+        raise ImproperlyConfigured(error_msg)
 
 
 def base64_encoder(image):
@@ -55,7 +71,7 @@ def parse_xml(xml_string_data, category):
 
 def make_query_string(application_number, mode):
     """ query string 생성 """
-    service_key = 'l8gBL3d0H0uEerbEKxYRva%2FQUSZQ3YXR9A9qGkFO7btByiwP09y2PfQc2Utg2cM%2FhChr3n44WtFPEJizwFrlwA%3D%3D'
+    service_key = get_secret("OPENAPI_KEY")
     necessary = '?serviceKey=' + service_key + '&applicationNumber=' + application_number
 
     if mode == 0:
@@ -91,7 +107,6 @@ def request_open_api(application_number, mode):
     req = urllib.request.Request(url + queryParams)
     response = urllib.request.urlopen(req)
     response_body = response.read()
-    print(application_number)
 
     # parse xml data
     # 상표명 혹은 물품 명칭, 출원인이름, 대리인이름, 출원상태, 공고일자, 공고번호
