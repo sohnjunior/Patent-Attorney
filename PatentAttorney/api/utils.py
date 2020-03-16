@@ -53,33 +53,48 @@ def parse_xml(xml_string_data, category):
     return parsed
 
 
-def make_query_string(application_number):
+def make_query_string(application_number, mode):
     """ query string 생성 """
     service_key = 'l8gBL3d0H0uEerbEKxYRva%2FQUSZQ3YXR9A9qGkFO7btByiwP09y2PfQc2Utg2cM%2FhChr3n44WtFPEJizwFrlwA%3D%3D'
     necessary = '?serviceKey=' + service_key + '&applicationNumber=' + application_number
-    option = '&application=true&registration=true&refused=true' \
+
+    if mode == 0:
+        option = '&application=true&registration=true&refused=true' \
              '&expiration=true&refused=true&expiration=true&withdrawal=true' \
              '&publication=true&cancel=true&abandonment=true&trademark=true' \
              '&serviceMark=true&trademarkServiceMark=true&businessEmblem=true' \
              '&collectiveMark=true&internationalMark=true&character=true&figure=true' \
              '&compositionCharacter=true&figureComposition=true'
+    else:
+        option = '&open=true&rejection=true&destroy=true' \
+             '&cancle=true&notice=true&registration=true&invalid=true' \
+             '&abandonment=true&simi=true&part=true&etc=true' \
+             '&destroy=true'
 
     query_string = necessary + option
     return query_string
 
 
-def request_open_api(application_number):
+def request_open_api(application_number, mode):
     """ 특허청 open api 호출 함수 """
     # request url
-    url = 'http://kipo-api.kipi.or.kr/openapi/service/trademarkInfoSearchService/getAdvancedSearch'
-    queryParams = make_query_string(application_number=application_number)
+    if mode == 0:
+        url = 'http://kipo-api.kipi.or.kr/openapi/service/trademarkInfoSearchService/getAdvancedSearch'
+        queryParams = make_query_string(application_number=application_number, mode=mode)
+        category = ['title']
+    else:
+        url = 'http://kipo-api.kipi.or.kr/openapi/service/designInfoSearchService/getAdvancedSearch'
+        queryParams = make_query_string(application_number=application_number, mode=mode)
+        category = ['articleName']
 
     # request and get response
     req = urllib.request.Request(url + queryParams)
     response = urllib.request.urlopen(req)
     response_body = response.read()
     print(application_number)
+
     # parse xml data
-    # 상표명, 출원인이름, 대리인이름, 출원상태, 공고일자, 공고번호
-    category = ['title', 'applicantName', 'agentName', 'applicationStatus', 'publicationDate', 'publicationNumber']
+    # 상표명 혹은 물품 명칭, 출원인이름, 대리인이름, 출원상태, 공고일자, 공고번호
+    category += ['applicantName', 'agentName', 'applicationStatus', 'publicationDate', 'publicationNumber']
     return parse_xml(xml_string_data=response_body.decode('utf-8'), category=category)
+

@@ -20,7 +20,7 @@ class MarkInfo(View):
     """
     def get(self, request, *args, **kwargs):
         query_app_num = request.GET['appnum']  # query application number
-        parsed_data = request_open_api(application_number=query_app_num)
+        parsed_data = request_open_api(application_number=query_app_num, mode=0)
 
         return JsonResponse(data=json.dumps(parsed_data), status=200, safe=False)
 
@@ -29,7 +29,11 @@ class DesignInfo(View):
     """
     디자인 출원번호를 기준으로 등록된 디자인 정보 반환
     """
-    pass
+    def get(self, request, *args, **kwargs):
+        query_app_num = request.GET['appnum']  # query application number
+        parsed_data = request_open_api(application_number=query_app_num, mode=1)
+
+        return JsonResponse(data=json.dumps(parsed_data), status=200, safe=False)
 
 
 class PatentPredict(View):
