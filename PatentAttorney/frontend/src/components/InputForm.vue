@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <v-container>
       <v-container>
         <vue2Dropzone id="dropzone"
           :options="dropzoneOptions"
@@ -11,9 +11,9 @@
           </div>
         </vue2Dropzone>
       </v-container>
-
-      <v-container>
-        <v-low align="center">
+       
+      <v-container fluid>
+        <v-row justify="center">
           <div>
             <v-btn-toggle v-model="toggled">
               <v-btn>
@@ -24,21 +24,20 @@
               </v-btn>
             </v-btn-toggle>
           </div>
-        </v-low>
+        </v-row>
       </v-container>
-
-      <v-container>
-        <v-low align="center">
-        <div v-if="!submit_flag">
-          <v-btn id="submit-button" outlined color="indigo" type="submit" @click="submitFile" >검색</v-btn>
-        </div>
-        <div v-else>
-          <v-progress-circular indeterminate :rotate="20" :size="40" :width="5" color="light-blue"></v-progress-circular>
-        </div>
-          </v-low>
+        
+      <v-container fluid>
+        <v-row justify="center">
+          <div v-if="!submit_flag">
+            <v-btn id="submit-button" outlined color="indigo" type="submit" @click="submitFile" >검색</v-btn>
+          </div>
+          <div v-else>
+            <v-progress-circular indeterminate :rotate="20" :size="40" :width="5" color="light-blue"></v-progress-circular>
+          </div>
+        </v-row>
       </v-container>
-
-    </div>
+    </v-container>
 </template>
 
 <script>
@@ -51,13 +50,12 @@ export default {
     return {
       inputFile: null,
       submit_flag: false,
-      selected: 5, // TODO
-      items: [1, 2, 3, 4, 5], // TODO
+      selected: 10,
       toggled: 0,
       dropzoneOptions: {
         url: 'https://httpbin.org/post',
         maxFiles: 5,
-        thumbnailWidth: 200,
+        thumbnailWidth: 150,
         addRemoveLinks: true,
         dictRemoveFile: '파일 삭제',
         dictCancelUpload: '업로드 취소',
@@ -99,12 +97,11 @@ export default {
         this.$store.commit('setResultAppNum', { appNumbers: result.result_app_numbers });
 
         // 결과 이미지들의 특허 정보 호출
-        // if(this.toggled === 0) {
-        //   this.$store.dispatch('getMarkInfo');
-        // } else {
-        //   this.$store.dispatch('getDesignInfo');
-        // }
-        await this.$store.dispatch('getMarkInfo');
+        if(this.toggled === 0) {
+          await this.$store.dispatch('getMarkInfo');
+        } else {
+          await this.$store.dispatch('getDesignInfo');
+        }
 
         // 라우터로 predict 페이지로 이동
         this.$router.push({name: 'predict'});

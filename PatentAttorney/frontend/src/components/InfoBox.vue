@@ -3,7 +3,7 @@
     <v-content class="pb-5">
       <v-container class="fill-height">
           <div class="text">
-          <v-row class="black--text mx-auto" :align="start">
+          <v-row class="black--text mx-auto" align="start">
             <v-col class="black--text text-center" cols="12" tag="h1">
               <span class="font-weight-black display-1">
                 <h3>ImagePredict Service</h3>
