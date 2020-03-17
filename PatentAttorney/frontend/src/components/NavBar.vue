@@ -1,6 +1,6 @@
 <template>
   <v-app-bar class="blue lighten-2" app flat="true">
-    <router-link to="/">
+    <router-link class="nav" to="/">
       <v-toolbar-title>ImagePredict Service</v-toolbar-title>
     </router-link>
   </v-app-bar>
@@ -13,6 +13,7 @@ export default {}
 <style scoped>
 .nav{
   background-color: transparent;
+  text-decoration: none;
 }
 </style>
 
