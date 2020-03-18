@@ -1,5 +1,7 @@
 from django.views.generic import View
 from django.http import JsonResponse
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 from .ai.utils import predict
 
@@ -14,6 +16,7 @@ from .utils import request_open_api, base64_encoder, parse_application_number
 STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class MarkInfo(View):
     """
     상표 출원번호를 기준으로 등록된 특허 정보 반환
@@ -25,6 +28,7 @@ class MarkInfo(View):
         return JsonResponse(data=json.dumps(parsed_data), status=200, safe=False)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class DesignInfo(View):
     """
     디자인 출원번호를 기준으로 등록된 디자인 정보 반환
@@ -37,6 +41,7 @@ class DesignInfo(View):
         return JsonResponse(data=json.dumps(parsed_data), status=200, safe=False)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class PatentPredict(View):
     """
     특허청에 등록된 이미지들을 기반으로 유사도 분석 결과 반환

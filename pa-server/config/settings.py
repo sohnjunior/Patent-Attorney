@@ -10,7 +10,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
 with open(os.path.join(BASE_DIR, 'config/secrets.json')) as f:
     secrets = json.load(f)
 
@@ -41,13 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api.apps.ApiConfig',
-    'webpack_loader',
+    'corsheaders',  # django cors headers
 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -125,13 +125,10 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
-# webpack loader
+# django cors setting
 
-WEBPACK_LOADER = {
-  'DEFAULT': {
-      'CACHE': not DEBUG,
-      'BUNDLE_DIR_NAME': '/bundles/',
-      'STATS_FILE': os.path.join(BASE_DIR, 'frontend/webpack-stats.json'),
-  }
-}
-
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = [
+    'https://127.0.0.1:8080',
+    'http://localhost:8080',
+]
