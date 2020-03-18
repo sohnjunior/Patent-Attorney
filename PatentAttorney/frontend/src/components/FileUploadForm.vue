@@ -15,8 +15,8 @@
           </div>
         </vue2Dropzone>
       </v-container>
-       
-      <v-container fluid>
+
+      <v-container fluid class="py-2">
         <v-row justify="center">
           <div>
             <v-btn-toggle v-model="toggled">
@@ -30,8 +30,8 @@
           </div>
         </v-row>
       </v-container>
-        
-      <v-container fluid>
+
+      <v-container fluid class="py-2">
         <v-row justify="center">
           <div v-if="!submit_flag">
             <v-btn id="submit-button" outlined color="indigo" type="submit" @click="submitFile" >검색</v-btn>
@@ -133,9 +133,6 @@ export default {
 #dropzone {
   width: 65%;
   margin: 0 auto;
-}
-#select-count {
-  width: 10%;
 }
 #submit-button {
   width: 5rem;
