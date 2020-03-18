@@ -63,7 +63,10 @@ def parse_xml(xml_string_data, category):
                     parsed[child.tag] = child.text
 
     except Exception as e:
-        print('parsing xml error : ', e)
+        header = root.find('header')
+        result_code = header.find('resultCode').text
+        error_msg = header.find('resultMsg').text
+        print(f'특허청 호출 에러 코드[{result_code}] : {error_msg}')
 
     return parsed
 
@@ -106,7 +109,7 @@ def request_open_api(application_number, mode):
     req = urllib.request.Request(url + queryParams)
     response = urllib.request.urlopen(req)
     response_body = response.read()
-    print(response_body)
+
     # parse xml data
     # 상표명 혹은 물품 명칭, 출원인이름, 대리인이름, 출원상태, 공고일자, 공고번호
     category += ['applicantName', 'agentName', 'applicationStatus', 'publicationDate', 'publicationNumber']
