@@ -2,8 +2,12 @@
     <v-container>
       <v-container>
         <vue2Dropzone id="dropzone"
+          ref="fileUploadDropzone"
           :options="dropzoneOptions"
           :useCustomSlot="true"
+          :duplicateCheck="true"
+          @vdropzone-duplicate-file="duplicateUpload"
+          @vdropzone-max-files-exceeded="fileLimitExceeded"
           @vdropzone-file-added="fileAdded">
           <div class="dropzone-custom-content">
             <h3 class="dropzone-custom-title">Drag and drop to upload content!</h3>
@@ -54,8 +58,9 @@ export default {
       toggled: 0,
       dropzoneOptions: {
         url: 'https://httpbin.org/post',
-        maxFiles: 5,
-        thumbnailWidth: 150,
+        maxFiles: 4,
+        thumbnailWidth: 140,
+        thumbnailMethod: 'contain',
         addRemoveLinks: true,
         dictRemoveFile: '파일 삭제',
         dictCancelUpload: '업로드 취소',
@@ -68,9 +73,20 @@ export default {
     }
   },
   methods: {
+    // dropzone 이벤트 관련 메소드
     fileAdded(file) {
       this.inputFile = file;
     },
+    fileLimitExceeded(file) {
+      alert('최대 4개까지 추가할 수 있습니다!');
+      this.$refs.fileUploadDropzone.removeFile(file);
+    },
+    duplicateUpload(file) {
+      alert('중복된 파일이 존재합니다!');
+      this.$refs.fileUploadDropzone.removeFile(file);
+    },
+
+    // 파일 업로드 관련 메소드
     async submitFile() {
       // check file existance
       if(!this.fileRegistered) {

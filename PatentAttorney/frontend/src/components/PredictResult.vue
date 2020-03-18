@@ -5,9 +5,8 @@
       <v-layout>
         <v-flex xs12 md4>
           <v-card class="mx-auto" max-width="200px">
-              <v-img :src="`data:image/jpeg;base64,${requestImage}`" class="request-image"></v-img>
-              <hr/>
-            <v-card-title>요청 이미지</v-card-title>
+            <v-img :src="`data:image/jpeg;base64,${requestImage}`" class="request-image"></v-img>
+            <hr/>
           </v-card>
         </v-flex>
 
