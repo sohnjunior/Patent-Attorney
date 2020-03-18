@@ -8,7 +8,8 @@
           :duplicateCheck="true"
           @vdropzone-duplicate-file="duplicateUpload"
           @vdropzone-max-files-exceeded="fileLimitExceeded"
-          @vdropzone-file-added="fileAdded">
+          @vdropzone-file-added="fileAdded"
+          @vdropzone-queue-complete="queueComplete">
           <div class="dropzone-custom-content">
             <h3 class="dropzone-custom-title">Drag and drop to upload content!</h3>
             <div class="subtitle">...or click to select a file from your computer</div>
@@ -34,7 +35,7 @@
       <v-container fluid class="py-2">
         <v-row justify="center">
           <div v-if="!submit_flag">
-            <v-btn id="submit-button" outlined color="indigo" type="submit" @click="submitFile" >검색</v-btn>
+            <v-btn id="submit-button" :disabled="!uploadDone" outlined color="indigo" type="submit" @click="submitFile" >검색</v-btn>
           </div>
           <div v-else>
             <v-progress-circular indeterminate :rotate="20" :size="40" :width="5" color="light-blue"></v-progress-circular>
@@ -56,6 +57,7 @@ export default {
       submit_flag: false,
       selected: 10,
       toggled: 0,
+      uploadDone: false,
       dropzoneOptions: {
         url: 'https://httpbin.org/post',
         maxFiles: 4,
@@ -75,7 +77,11 @@ export default {
   methods: {
     // dropzone 이벤트 관련 메소드
     fileAdded(file) {
+      this.uploadDone = false;
       this.inputFile = file;
+    },
+    queueComplete() {
+      this.uploadDone = true;
     },
     fileLimitExceeded(file) {
       alert('최대 4개까지 추가할 수 있습니다!');

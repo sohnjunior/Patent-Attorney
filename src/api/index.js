@@ -1,28 +1,21 @@
 import axios from 'axios';
 
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+const instance = axios.create({
+  baseURL: 'http://127.0.0.1:8000/'
+});
 
 function requestImagePrediction(formData) {
-  return axios.post("/api/patent/predict/", formData, {
-    headers: { 'Content-Type': 'multipart/form-data' }
+  return instance.post("/api/patent/predict/", formData, {
+    headers: { "Content-Type": "multipart/form-data" }
   });
 }
 
 function requestMarkInfo(appNum) {
-  return axios.get("/api/mark/detail", {
-    params: {
-      appnum: appNum
-    }
-  });
+  return instance.get(`/api/mark/detail/${appNum}/`);
 }
 
 function requestDesignInfo(appNum) {
-  return axios.get("api/design/detail", {
-    params: {
-      appnum: appNum
-    }
-  });
+  return instance.get(`/api/mark/detail/${appNum}/`);
 }
 
 export { requestImagePrediction, requestMarkInfo, requestDesignInfo }
