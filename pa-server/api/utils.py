@@ -49,7 +49,7 @@ def parse_xml(xml_string_data, category):
 
     # parsing result dictionary
     keys = set(category)
-    parsed = dict.fromkeys(keys, '')
+    parsed = dict.fromkeys(keys, 'empty')
 
     try:
         body = root.find('body')
@@ -61,8 +61,7 @@ def parse_xml(xml_string_data, category):
             if child.tag in category:
                 if child.text:
                     parsed[child.tag] = child.text
-                else:
-                    parsed[child.tag] = 'empty'
+
     except Exception as e:
         print('parsing xml error : ', e)
 
@@ -107,7 +106,7 @@ def request_open_api(application_number, mode):
     req = urllib.request.Request(url + queryParams)
     response = urllib.request.urlopen(req)
     response_body = response.read()
-
+    print(response_body)
     # parse xml data
     # 상표명 혹은 물품 명칭, 출원인이름, 대리인이름, 출원상태, 공고일자, 공고번호
     category += ['applicantName', 'agentName', 'applicationStatus', 'publicationDate', 'publicationNumber']

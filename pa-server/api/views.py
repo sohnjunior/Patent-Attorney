@@ -22,7 +22,7 @@ class MarkInfo(View):
     상표 출원번호를 기준으로 등록된 특허 정보 반환
     """
     def get(self, request, *args, **kwargs):
-        query_app_num = request.GET['appnum']  # query application number
+        query_app_num = str(self.kwargs.get('pk'))  # query application number
         parsed_data = request_open_api(application_number=query_app_num, mode=0)
 
         return JsonResponse(data=json.dumps(parsed_data), status=200, safe=False)
@@ -34,8 +34,7 @@ class DesignInfo(View):
     디자인 출원번호를 기준으로 등록된 디자인 정보 반환
     """
     def get(self, request, *args, **kwargs):
-        query_app_num = request.GET['appnum']  # query application number
-        print(query_app_num)
+        query_app_num = str(self.kwargs.get('pk'))  # query application number
         parsed_data = request_open_api(application_number=query_app_num, mode=1)
 
         return JsonResponse(data=json.dumps(parsed_data), status=200, safe=False)
