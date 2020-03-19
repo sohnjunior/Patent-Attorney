@@ -6,16 +6,16 @@
           <v-row class="black--text mx-auto" align="start">
             <v-col class="black--text text-center" cols="12" tag="h1">
               <span class="font-weight-black display-1">
-                <h3>ImagePredict Service</h3>
+                <h3>Patent Info Service</h3>
               </span>
               <span>
                 <h6 class="font-weight-thin">BY PANG'S</h6>
               </span>
               <br>
               <p class="font-weight-thin">
-                Image similarity measurement service
+                Patent Image similarity analysis service
                 <br> 
-                using deepranking algorithm
+                using deep-ranking algorithm
               </p>
             </v-col>
           </v-row>

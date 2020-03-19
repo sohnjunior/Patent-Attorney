@@ -6,47 +6,48 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    requestImage: '', // 사용자가 요청한 이미지(base64)
-    resultCount: 0, // 사용자가 요청한 이미지 개수
+    requestImage: [], // 사용자가 요청한 이미지(base64)
+    resultCount: [], // 사용자가 요청한 이미지 개수
     resultImages: [], // json으로 받은 결과 이미지들(base64)
     resultAppNumbers: [], // 결과 이미지들의 출원번호
     resultPatentInfos: [], // 결과 이미지들에 대한 특허 정보 
   },
   getters: {
-    getResultCount: state => {
-      return state.resultCount;
+    getResultCount: (state) => (idx) => {
+      return state.resultCount[idx];
     },
-    getRequestImage: state => {
-      return state.requestImage;
+    getRequestImage: (state) => (idx) => {
+      return state.requestImage[idx];
     },
-    getResultImages: state => {
-      return state.resultImages;
+    getResultImages: (state) => (idx) => {
+      return state.resultImages[idx];
     },
-    getPatentInfos: state => {
-      return state.resultPatentInfos;
+    getPatentInfos: (state) => (idx) => {
+      return state.resultPatentInfos[idx];
     }
   },
   mutations: {
     setResultCount(state, payload) {
-      state.resultCount = payload.resultCount;
+      state.resultCount.push(payload.resultCount);
     },
     setRequestImage(state, payload) {
-      state.requestImage = payload.imageData;
+      state.requestImage.push(payload.imageData);
     },
     setResultImages(state, payload) {
-      state.resultImages = payload.imageData;
+      state.resultImages.push(payload.imageData);
     },
     setResultAppNum(state, payload) {
-      state.resultAppNumbers = payload.appNumbers;
+      state.resultAppNumbers.push(payload.appNumbers);
     },
     setResultPatentInfo(state, payload) {
-      state.resultPatentInfos = payload.patentInfos;
+      state.resultPatentInfos.push(payload.patentInfos);
     },
   },
   actions: {
+    // TODO: 지금은 0번 첫번째 이미지에 대한 특허 정보만 호출
     async getMarkInfo({ commit, state }) {
       var patentInfos = new Array();
-      for(var appNum of state.resultAppNumbers) {
+      for(var appNum of state.resultAppNumbers[0]) {
         const response = await requestMarkInfo(appNum);
 
         const result = JSON.parse(response.data);
@@ -57,7 +58,7 @@ export default new Vuex.Store({
     },
     async getDesignInfo({ commit, state }) {
       var patentInfos = new Array();
-      for (var appNum of state.resultAppNumbers) {
+      for (var appNum of state.resultAppNumbers[0]) {
         const response = await requestDesignInfo(appNum);
 
         const result = JSON.parse(response.data);

@@ -8,7 +8,7 @@
         </v-container> 
         <hr>
         <v-container>
-          <PredictResult></PredictResult>
+          <PredictResultWrapper></PredictResultWrapper>
         </v-container>
       </v-content>
       
@@ -18,11 +18,11 @@
 
 <script>
 import NavBar from '../components/NavBar.vue';
-import PredictResult from '../components/PredictResult.vue';
+import PredictResultWrapper from '../components/PredictResultWrapper.vue';
 import Footer from '../components/Footer.vue';
 
 export default {
-  components: { NavBar, PredictResult, Footer },
+  components: { NavBar, PredictResultWrapper, Footer },
 }
 </script>
 

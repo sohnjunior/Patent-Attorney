@@ -34,7 +34,7 @@
 
       <v-container fluid class="py-2">
         <v-row justify="center">
-          <div v-if="!submit_flag">
+          <div v-if="!submitFlag">
             <v-btn id="submit-button" :disabled="!uploadDone" outlined color="indigo" type="submit" @click="submitFile" >검색</v-btn>
           </div>
           <div v-else>
@@ -53,8 +53,8 @@ export default {
   components: { vue2Dropzone },
   data() {
     return {
-      inputFile: null,
-      submit_flag: false,
+      inputFile: [],
+      submitFlag: false,
       selected: 10,
       toggled: 0,
       uploadDone: false,
@@ -78,7 +78,7 @@ export default {
     // dropzone 이벤트 관련 메소드
     fileAdded(file) {
       this.uploadDone = false;
-      this.inputFile = file;
+      this.inputFile.push(file);
     },
     queueComplete() {
       this.uploadDone = true;
@@ -93,6 +93,12 @@ export default {
     },
 
     // 파일 업로드 관련 메소드
+    settingStore(result) {
+      this.$store.commit('setResultCount', { resultCount: result.request_num });
+      this.$store.commit('setRequestImage', { imageData: result.request_image });
+      this.$store.commit('setResultImages', { imageData: result.images });
+      this.$store.commit('setResultAppNum', { appNumbers: result.result_app_numbers });
+    },
     async submitFile() {
       // check file existance
       if(!this.fileRegistered) {
@@ -100,36 +106,35 @@ export default {
         return;
       }
 
-      let formData = new FormData();
-      formData.append('file', this.inputFile);
-      formData.append('selected', this.selected);
-      formData.append('searchType', this.toggled);
+      // spinner 작동
+      this.submitFlag=true;
 
-      try {
-        this.submit_flag=true;
+      const resultArray = new Array();
+      for(let queryFile of this.inputFile) {
+        let formData = new FormData();
+        formData.append('file', queryFile);
+        formData.append('selected', this.selected);
+        formData.append('searchType', this.toggled);
 
         // 결과 이미지들 요청
-        const response = await requestImagePrediction(formData);
-
-        // JSON 파싱한 후 필요한 정보들 store에 저장
-        const result = JSON.parse(response.data);
-        this.$store.commit('setResultCount', { resultCount: result.request_num });
-        this.$store.commit('setRequestImage', { imageData: result.request_image });
-        this.$store.commit('setResultImages', { imageData: result.images });
-        this.$store.commit('setResultAppNum', { appNumbers: result.result_app_numbers });
-
-        // 결과 이미지들의 특허 정보 호출
-        if(this.toggled === 0) {
-          await this.$store.dispatch('getMarkInfo');
-        } else {
-          await this.$store.dispatch('getDesignInfo');
-        }
-
-        // 라우터로 predict 페이지로 이동
-        this.$router.push({name: 'predict'});
-      } catch(error) {
-        console.log('error : ', error);
+        const { data } = await requestImagePrediction(formData);
+        resultArray.push(JSON.parse(data));
       }
+
+      // TODO: 파싱한 정보들을 store에 저장 TODO 여러개 설정하도록
+      console.log(resultArray);
+      this.settingStore(resultArray[0]);
+      
+      // 결과 이미지들의 특허 정보 호출
+      if(this.toggled === 0) {
+        await this.$store.dispatch('getMarkInfo');
+      } else {
+        await this.$store.dispatch('getDesignInfo');
+      }
+
+      // 라우터로 predict 페이지로 이동
+      this.$router.push({name: 'predict'});
+      
     },
   }
 }
