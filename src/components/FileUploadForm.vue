@@ -17,6 +17,12 @@
         </vue2Dropzone>
       </v-container>
 
+      <v-container fluid>
+        <v-row justify="center">
+          <Alerts :alertText="warningText" :showAlert="showAlert" @cancel="showAlert = false"></Alerts>
+        </v-row>
+      </v-container>
+
       <v-container fluid class="py-2">
         <v-row justify="center">
           <div>
@@ -47,10 +53,11 @@
 
 <script>
 import vue2Dropzone from 'vue2-dropzone';
+import Alerts from './Alerts.vue';
 import { requestImagePrediction } from '../api/index';
 
 export default {
-  components: { vue2Dropzone },
+  components: { vue2Dropzone, Alerts },
   data() {
     return {
       inputFile: [],
@@ -66,12 +73,9 @@ export default {
         addRemoveLinks: true,
         dictRemoveFile: '파일 삭제',
         dictCancelUpload: '업로드 취소',
-      }
-    }
-  },
-  computed: {
-    fileRegistered() {
-      return (!this.inputFile ? false : true);
+      },
+      showAlert: false,
+      warningText: '',
     }
   },
   methods: {
@@ -84,11 +88,13 @@ export default {
       this.uploadDone = true;
     },
     fileLimitExceeded(file) {
-      alert('최대 4개까지 추가할 수 있습니다!');
+      this.warningText = '최대 4개까지 추가할 수 있습니다';
+      this.showAlert = true;
       this.$refs.fileUploadDropzone.removeFile(file);
     },
     duplicateUpload(file) {
-      alert('중복된 파일이 존재합니다!');
+      this.warningText = '중복된 파일이 존재합니다';
+      this.showAlert = true;
       this.$refs.fileUploadDropzone.removeFile(file);
     },
 
@@ -100,12 +106,6 @@ export default {
       this.$store.commit('setResultAppNum', { appNumbers: result.result_app_numbers });
     },
     async submitFile() {
-      // check file existance
-      if(!this.fileRegistered) {
-        alert('파일을 선택해주세요');
-        return;
-      }
-
       // spinner 작동
       this.submitFlag=true;
 
