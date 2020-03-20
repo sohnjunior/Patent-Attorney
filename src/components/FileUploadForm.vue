@@ -19,7 +19,7 @@
 
       <v-container fluid>
         <v-row justify="center">
-          <Alerts :alertText="warningText" :showAlert="showAlert" @cancel="showAlert = false"></Alerts>
+          <Alerts :alertText="warningText" :showAlert="showAlert" @cancel="alertCancel"></Alerts>
         </v-row>
       </v-container>
 
@@ -62,7 +62,7 @@ export default {
     return {
       inputFile: [],
       submitFlag: false,
-      selected: 10,
+      selected: 5,
       toggled: 0,
       uploadDone: false,
       dropzoneOptions: {
@@ -97,6 +97,10 @@ export default {
       this.showAlert = true;
       this.$refs.fileUploadDropzone.removeFile(file);
     },
+    alertCancel() {
+      this.uploadDone = true;
+      this.showAlert = false;
+    },
 
     // 파일 업로드 관련 메소드
     settingStore(result) {
@@ -121,10 +125,11 @@ export default {
         resultArray.push(JSON.parse(data));
       }
 
-      // TODO: 파싱한 정보들을 store에 저장 TODO 여러개 설정하도록
-      console.log(resultArray);
-      this.settingStore(resultArray[0]);
-      
+      // 파싱한 정보들을 store에 저장 
+      for(let result of resultArray) {
+        this.settingStore(result);
+      }
+
       // 결과 이미지들의 특허 정보 호출
       if(this.toggled === 0) {
         await this.$store.dispatch('getMarkInfo');

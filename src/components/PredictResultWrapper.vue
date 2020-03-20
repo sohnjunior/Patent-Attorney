@@ -3,7 +3,7 @@
   <div>
     <v-container>
       <v-layout>
-        <v-flex xs12 md4>
+        <v-flex xs12 md6>
           <QueryImage></QueryImage>
         </v-flex>
 

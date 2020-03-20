@@ -16,6 +16,9 @@ export default new Vuex.Store({
     getResultCount: (state) => (idx) => {
       return state.resultCount[idx];
     },
+    getAllRequestImage(state) {
+      return state.requestImage;
+    },
     getRequestImage: (state) => (idx) => {
       return state.requestImage[idx];
     },
