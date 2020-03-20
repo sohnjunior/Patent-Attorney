@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-card class="mx-auto" max-width="200px">
-        <v-img :src="`data:image/jpeg;base64,${requestImage(0)}`" class="request-image"></v-img>
+        <v-img :src="`data:image/jpeg;base64,${requestImage(imageIdx)}`" class="request-image"></v-img>
       </v-card>
     </v-row>
     <br>
@@ -17,6 +17,11 @@ import PreviewImage from './PreviewImage.vue';
 
 export default {
   components: { PreviewImage },
+  data() {
+    return {
+      imageIdx: 0
+    }
+  },
   computed: {
     requestImage() {
       return (idx) => {
