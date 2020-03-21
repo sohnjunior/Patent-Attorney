@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { EventBus } from '../utils/event_bus.js';
 import PreviewImage from './PreviewImage.vue';
 
 export default {
@@ -28,6 +29,11 @@ export default {
         return this.$store.getters.getRequestImage(idx);
       }
     },
+  },
+  created() {
+    EventBus.$on('index-change', (idx) => {
+      this.imageIdx = idx;
+    });
   }
 }
 </script>

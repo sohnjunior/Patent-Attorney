@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import { EventBus } from '../utils/event_bus.js';
+
 export default {
   data() {
     return {
@@ -32,11 +34,13 @@ export default {
     prevImage() {
       if(this.selected > 0) {
         this.selected -= 1;
+        EventBus.$emit('index-change', this.selected);
       }
     },
     nextImage() {
       if(this.selected < this.requestImages.length - 1) {
         this.selected += 1;
+        EventBus.$emit('index-change', this.selected);
       }
     }
   }
@@ -52,6 +56,9 @@ export default {
   border-radius: 4px;
   padding: 3px;
   margin-left: 10px;
+  transition-property: width, height, opacity;
+  transition-duration: 0.4s;
+  transition-timing-function: ease;
 }
 .preview-image-selected {
   width: 80px;
