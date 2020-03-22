@@ -47,28 +47,31 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    // TODO: 지금은 0번 첫번째 이미지에 대한 특허 정보만 호출
     async getMarkInfo({ commit, state }) {
-      var patentInfos = new Array();
-      for(var appNum of state.resultAppNumbers[0]) {
-        const response = await requestMarkInfo(appNum);
+      for(let idx = 0; idx < state.requestImage.length; idx++) {
+        var patentInfos = new Array();
+        for (var appNum of state.resultAppNumbers[idx]) {
+          const response = await requestMarkInfo(appNum);
 
-        const result = JSON.parse(response.data);
-        patentInfos.push(result);
+          const result = JSON.parse(response.data);
+          patentInfos.push(result);
+        }
+
+        commit('setResultPatentInfo', { patentInfos });
       }
-
-      commit('setResultPatentInfo', { patentInfos });
     },
     async getDesignInfo({ commit, state }) {
-      var patentInfos = new Array();
-      for (var appNum of state.resultAppNumbers[0]) {
-        const response = await requestDesignInfo(appNum);
+      for(let idx = 0; idx < state.requestImage.length; idx++) {
+        var patentInfos = new Array();
+        for (var appNum of state.resultAppNumbers[idx]) {
+          const response = await requestDesignInfo(appNum);
 
-        const result = JSON.parse(response.data);
-        patentInfos.push(result);
+          const result = JSON.parse(response.data);
+          patentInfos.push(result);
+        }
+
+        commit('setResultPatentInfo', { patentInfos });
       }
-
-      commit('setResultPatentInfo', { patentInfos });
     },
   },
 })

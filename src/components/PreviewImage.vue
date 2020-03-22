@@ -49,8 +49,8 @@ export default {
 
 <style scoped>
 .preview-image {
-  width: 65px;
-  height: 65px;
+  width: 60px;
+  height: 60px;
   opacity: 0.5;
   border: 1px solid #ddd;
   border-radius: 4px;

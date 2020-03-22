@@ -139,7 +139,6 @@ export default {
 
       // 라우터로 predict 페이지로 이동
       this.$router.push({name: 'predict'});
-      
     },
   }
 }

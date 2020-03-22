@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { EventBus } from '../utils/event_bus.js';
 import QueryImage from './QueryImage.vue';
 import ResultTable from './ResultTable.vue';
 
@@ -49,24 +50,29 @@ export default {
     }
   },
   created() {
-    // FIXME: 현재 queryIdx가 0번째에 고정되어 있다.
-    const queryIdx = 0;
-    for(let idx = 0; idx < this.resultCount(queryIdx); idx++) {
-      const obj = {
-        imageData: this.resultImages(queryIdx)[idx],
-        title: this.resultInfos(queryIdx)[idx].title || this.resultInfos(queryIdx)[idx].articleName,
-        applicationStatus: this.resultInfos(queryIdx)[idx].applicationStatus,
-        applicantName: this.resultInfos(queryIdx)[idx].applicantName,
-        agentName: this.resultInfos(queryIdx)[idx].agentName,
-        publicationDate: this.resultInfos(queryIdx)[idx].publicationDate,
-        publicationNumber: this.resultInfos(queryIdx)[idx].publicationNumber,
-      }
+    EventBus.$on('index-change', (idx) => {
+      this.items = [];
+      const queryIdx = idx;
+      for(let idx = 0; idx < this.resultCount(queryIdx); idx++) {
+        const obj = {
+          imageData: this.resultImages(queryIdx)[idx],
+          title: this.resultInfos(queryIdx)[idx].title || this.resultInfos(queryIdx)[idx].articleName,
+          applicationStatus: this.resultInfos(queryIdx)[idx].applicationStatus,
+          applicantName: this.resultInfos(queryIdx)[idx].applicantName,
+          agentName: this.resultInfos(queryIdx)[idx].agentName,
+          publicationDate: this.resultInfos(queryIdx)[idx].publicationDate,
+          publicationNumber: this.resultInfos(queryIdx)[idx].publicationNumber,
+        }
 
-      this.items.push(obj);
-    }
-    
-    // set page count
-    this.pageCount = Math.ceil(this.resultImages(queryIdx).length / this.itemsPerPage);
+        this.items.push(obj);
+      }
+      
+      // set page count
+      this.pageCount = Math.ceil(this.resultImages(queryIdx).length / this.itemsPerPage);
+    });
+  },
+  mounted() {
+    EventBus.$emit('index-change', 0);  // 초기 인덱스 0으로 설정
   }
 }
 </script>
