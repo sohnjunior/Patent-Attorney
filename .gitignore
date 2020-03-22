@@ -1,6 +1,5 @@
 .DS_Store/
 .DS_Store
-secrets.json
 myvenv/
 pa-server/db.sqlite3
 .idea/
@@ -10,6 +9,7 @@ embedding.txt
 triplet.csv
 node_modules/
 /dist
+pa-server/config/secrets.json
 
 ### Django ###
 *.log
