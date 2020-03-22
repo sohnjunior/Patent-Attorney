@@ -1,12 +1,12 @@
 <template>
   <v-container>
     <v-row justify="center">
+      <span @click="prevImage" class="left-button"> <font-awesome-icon :icon="['fas', 'angle-left']" size="3x"/> </span>
       <span v-for="(image, index) in requestImages" :key="image">
         <v-img :src="`data:image/jpeg;base64,${image}`" :class="imageStyle(index)"></v-img>
       </span>
+      <span @click="nextImage" class="right-button"> <font-awesome-icon :icon="['fas', 'angle-right']" size="3x"/> </span>
     </v-row>
-    <button @click="prevImage"> 이전 </button>
-    <button @click="nextImage"> 다음 </button>
   </v-container>
 </template>
 
@@ -69,5 +69,13 @@ export default {
   padding: 3px;
   margin-left: 10px;
   box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+.left-button {
+  margin-right: 20px;
+  color:rgba(0, 139, 186, 0.342);
+}
+.right-button {
+  margin-left: 20px;
+  color:rgba(0, 139, 186, 0.342);
 }
 </style>
