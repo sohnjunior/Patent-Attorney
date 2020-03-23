@@ -1,19 +1,13 @@
 <template>
   <v-app>
-  <div>
-    <v-container>
-      <v-layout>
-        <v-flex xs12 md6>
-          <QueryImage></QueryImage>
-        </v-flex>
-
-        <v-flex xs12 md8>
-          <ResultTable :items="items" :pageCount="pageCount" :itemsPerPage="itemsPerPage"></ResultTable>
-        </v-flex>
-      
-      </v-layout>
-    </v-container>
-  </div>
+    <v-content>
+      <v-container>
+        <QueryImage></QueryImage>
+      </v-container>
+      <v-container>
+        <ResultTable :items="items" :pageCount="pageCount" :itemsPerPage="itemsPerPage"></ResultTable>
+      </v-container>
+    </v-content>
   </v-app>
 </template>
 
