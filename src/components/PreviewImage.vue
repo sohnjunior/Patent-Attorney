@@ -71,10 +71,12 @@ export default {
   box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
 }
 .left-button {
+  margin-top: 15px;
   margin-right: 30px;
   color:rgba(0, 139, 186, 0.342);
 }
 .right-button {
+  margin-top: 15px;
   margin-left: 30px;
   color:rgba(0, 139, 186, 0.342);
 }
