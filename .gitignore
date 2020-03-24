@@ -4,6 +4,8 @@ myvenv/
 pa-server/db.sqlite3
 .idea/
 static/
+yolov3.cfg
+yolov3.weights
 deeprank.pt
 embedding.txt
 triplet.csv

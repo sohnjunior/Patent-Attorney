@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
-from .ai.utils import predict
+from .ai.utils import predict, object_detection
 
 import base64
 from io import BytesIO
@@ -51,6 +51,8 @@ class PatentPredict(View):
         query_image = request.FILES['file']  # 요청 이미지
 
         # deep ranking TODO search type 에 따라 object detection 수행
+        if search_type == 0:
+            query_image = object_detection(query_image=query_image)
         result = predict(query_image, request_num)
 
         # static folder 에 이미지 데이터 구성해놓고 결과 이미지 로드해서 반환해주기
