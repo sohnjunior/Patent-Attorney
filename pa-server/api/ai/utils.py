@@ -7,24 +7,21 @@ import numpy as np
 import torch
 import cv2
 import base64
-from io import BytesIO
 
 from .net import DeepRank
 
-# -- pre-processing component
+"""
+pre-processing component
+"""
 data_transforms = transforms.Compose([
         transforms.Resize((224, 224), interpolation=2),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
 
-
-def euclidean_distance(x, y):
-    """ calculate euclidean distance """
-    return np.sqrt(np.sum(x - y, axis=1) ** 2)
-
-
-# -- path info
+"""
+path info
+"""
 TRIPLET_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'triplet.csv')
 MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'deeprank.pt')
 EMBEDDING_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'embedding.txt')
@@ -32,16 +29,31 @@ WEIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'yolov3.w
 CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'yolov3.cfg')
 
 
-def query_embedding(model, query_image_path):
+def euclidean_distance(x, y):
+    """
+    calculate euclidean distance
+
+    :param x: feature map x
+    :param y: feature map y
+    :return: l2 distance between x and y
+    """
+    return np.sqrt(np.sum(x - y, axis=1) ** 2)
+
+
+def query_embedding(model, query_image_path, detected):
     """
     단일 요청 이미지에 대해 feature map 을 생성한다.
 
     :param model: deep ranking model
     :param query_image_path: request image path
+    :param detected: processed object detection
     :return: feature map
     """
     # read query image and pre-processing
-    query_image = Image.open(query_image_path).convert('RGB')
+    if detected:
+        query_image = Image.fromarray(query_image_path, 'RGB')
+    else:
+        query_image = Image.open(query_image_path).convert('RGB')
     query_image = data_transforms(query_image)
     query_image = query_image[None]  # add new axis
 
@@ -52,12 +64,13 @@ def query_embedding(model, query_image_path):
     return embedding.cpu().detach().numpy()
 
 
-def predict(query_image, result_num):
+def predict(query_image, result_num, detected=False):
     """
     요청 이미지를 통해 가장 유사한 이미지들을 찾는다.
 
     :param query_image: requested image (base64)
     :param result_num: requested number
+    :param detected: processed object-detection
     :return: similar images
     """
     model = DeepRank()
@@ -67,7 +80,7 @@ def predict(query_image, result_num):
     train_embedded = np.fromfile(EMBEDDING_PATH, dtype=np.float32).reshape(-1, 4096)
 
     # embedding query image
-    query_embedded = query_embedding(model, query_image)
+    query_embedded = query_embedding(model, query_image, detected)
 
     #  by euclidean distance, find top ranked similar images
     image_dist = euclidean_distance(train_embedded, query_embedded)
@@ -132,16 +145,16 @@ def object_detection(query_image):
     indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
 
     # case 1: 객체가 하나도 발견되지 않을 경우
-    if not indexes:
-        print('no detection')
-        return query_image
+    if len(indexes) == 0:
+        print('query image detected: nothing')
+        return query_image, False
 
     # case 2, 3: 하나이상 발견될 경우
     for i in range(len(boxes)):
         if i in indexes:
             (x, y, w, h) = boxes[i]
+            src = img.copy()
+            crop_img = src[x:x+w, y:y+h]
             label = classes[class_indices[i]]
-            print(label)
-            # cv2.rectangle(input_image, (x, y), (x + w, y + h), color, 2)
-
-    return query_image
+            print('query image detected: ' + label)
+            return crop_img, True

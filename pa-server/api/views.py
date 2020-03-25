@@ -50,10 +50,12 @@ class PatentPredict(View):
         request_num = int(request.POST['selected'])  # 요청한 유사 이미지 개수
         query_image = request.FILES['file']  # 요청 이미지
 
-        # deep ranking TODO search type 에 따라 object detection 수행
+        # deep ranking
+        # search type 에 따라 object detection 수행
+        detected = False
         if search_type == 0:
-            query_image = object_detection(query_image=query_image)
-        result = predict(query_image, request_num)
+            query_image, detected = object_detection(query_image=query_image)
+        result = predict(query_image, request_num, detected)
 
         # static folder 에 이미지 데이터 구성해놓고 결과 이미지 로드해서 반환해주기
         app_nums = []
@@ -73,7 +75,7 @@ class PatentPredict(View):
             img_binary.append(img_str)
 
         # encoding request image to base64
-        raw_image = Image.open(query_image).convert('RGB')
+        raw_image = Image.open(request.FILES['file']).convert('RGB')
         query_image_base64 = base64_encoder(raw_image)
 
         # response object
