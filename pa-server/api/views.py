@@ -11,7 +11,7 @@ from PIL import Image
 import json
 import os
 
-from .utils import request_open_api, base64_encoder, parse_application_number
+from .utils import base64_encoder, parse_application_number
 
 STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 
@@ -23,7 +23,7 @@ class MarkInfo(View):
     """
     def get(self, request, *args, **kwargs):
         query_app_num = str(self.kwargs.get('pk'))  # query application number
-        parsed_data = request_open_api(application_number=query_app_num, mode=0)
+        # parsed_data = request_open_api(application_number=query_app_num, mode=0) TODO 변경 필요
 
         return JsonResponse(data=json.dumps(parsed_data), status=200, safe=False)
 
@@ -35,7 +35,7 @@ class DesignInfo(View):
     """
     def get(self, request, *args, **kwargs):
         query_app_num = str(self.kwargs.get('pk'))  # query application number
-        parsed_data = request_open_api(application_number=query_app_num, mode=1)
+        # parsed_data = request_open_api(application_number=query_app_num, mode=1) TODO 변경 필요
 
         return JsonResponse(data=json.dumps(parsed_data), status=200, safe=False)
 
@@ -57,6 +57,7 @@ class PatentPredict(View):
             query_image, detected = object_detection(query_image=query_image)
         result = predict(query_image, request_num, detected)
 
+        # TODO model에 이미지 경로를 저장해놓으면 이미지를 static에 유지할 필요 없어짐.
         # static folder 에 이미지 데이터 구성해놓고 결과 이미지 로드해서 반환해주기
         app_nums = []
         img_binary = []

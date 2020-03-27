@@ -76,6 +76,7 @@ def predict(query_image, result_num, detected=False):
     model = DeepRank()
     model.load_state_dict(torch.load(MODEL_PATH, map_location=torch.device('cpu')))  # load model parameters
 
+    # TODO 디자인 이미지와 상표 이미지 분리해서 트리플렛 및 임베딩 파일 유지
     train_df = pd.read_csv(TRIPLET_PATH)
     train_embedded = np.fromfile(EMBEDDING_PATH, dtype=np.float32).reshape(-1, 4096)
 

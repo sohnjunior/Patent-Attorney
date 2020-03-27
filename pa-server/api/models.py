@@ -1,3 +1,29 @@
 from django.db import models
 
-# Create your models here.
+
+class CommonInfo(models.Model):
+    app_num = models.CharField(max_length=64)
+    app_name = models.CharField(max_length=64)
+    agent_name = models.CharField(max_length=64)
+    app_status = models.CharField(max_length=64)
+    pub_date = models.DateField()
+    pub_num = models.CharField(max_length=64)
+    image_path = models.URLField()
+
+    class Meta:
+        abstract = True
+
+
+class MarkPatentInfo(CommonInfo):
+    title = models.CharField(max_length=64)
+
+    def __str__(self):
+        return self.app_num
+
+
+class DesignPatentInfo(CommonInfo):
+    article_name = models.CharField(max_length=64)
+
+    def __str__(self):
+        return self.app_num
+

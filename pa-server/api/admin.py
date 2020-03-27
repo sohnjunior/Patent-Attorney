@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import MarkPatentInfo, DesignPatentInfo
 
-# Register your models here.
+admin.site.register(MarkPatentInfo)
+admin.site.register(DesignPatentInfo)
+
