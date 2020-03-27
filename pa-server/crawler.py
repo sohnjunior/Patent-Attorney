@@ -1,4 +1,5 @@
 import json
+import unicodedata
 import urllib.request
 import xml.etree.ElementTree as elemTree
 
@@ -100,23 +101,56 @@ def request_open_api(application_number, mode):
     return parse_xml(xml_string_data=response_body.decode('utf-8'), category=category)
 
 
-# TODO 닭과 의자 특허 정보 db에 저장
-from api.models import MarkPatentInfo, DesignPatentInfo
+def split_extension(filename):
+    """
+    인자로 받은 문자열에서 확장자부분을 제거한다.
 
-if __name__ == '__main__':
-    mode = 0
-    app_num = str(4020020037823)
-    data = request_open_api(str(4020020037823), mode)
-    print(data)
+    :param filename: 파일명
+    :return: 출원번호
+    """
+    return filename.split('.')[0]
+
+
+def create_model_instance(app_num, mode):
+    """
+    새로운 모델 인스턴스를 생성한다.
+
+    :param app_num: 출원번호
+    :param mode: 상표 or 디자인
+    :return: None
+    """
+    data = request_open_api(app_num, mode)
 
     # convert to YYYY-MM-DD format
     pub_date = datetime.datetime.strptime(data['publicationDate'], "%Y%m%d").date()
 
     if mode == 0:
-        MarkPatentInfo.objects.create(title=data['title'], app_num=app_num, app_name=data['applicantName'],
-                                      app_status=data['applicationStatus'], pub_date=pub_date,
-                                      pub_num=data['publicationNumber'], image_path=data['bigDrawing'])
+        obj, created = MarkPatentInfo.objects.get_or_create(title=data['title'], app_num=app_num, app_name=data['applicantName'],
+                                                            app_status=data['applicationStatus'], pub_date=pub_date,
+                                                            pub_num=data['publicationNumber'], image_path=data['bigDrawing'])
     else:
-        DesignPatentInfo.objects.create(article_name=data['title'], app_num=app_num, app_name=data['applicantName'],
-                                        app_status=data['applicationStatus'], pub_date=pub_date,
-                                        pub_num=data['publicationNumber'], image_path=data['imagePathLarge'])
+        obj, created = DesignPatentInfo.objects.get_or_create(article_name=data['title'], app_num=app_num,
+                                                              app_name=data['applicantName'], app_status=data['applicationStatus'],
+                                                              pub_date=pub_date, pub_num=data['publicationNumber'], image_path=data['imagePathLarge'])
+    if not created:
+        print('duplicated object detected!', obj)
+
+
+# TODO 닭과 의자 특허 정보 db에 저장
+from api.models import MarkPatentInfo, DesignPatentInfo
+
+if __name__ == '__main__':
+    mark_list = ['닭', '태양']
+    design_list = ['의자', '전기스탠드']
+    dirs = os.listdir('./train')
+    for dir in dirs:
+        dir = unicodedata.normalize('NFC', dir)
+        if dir in mark_list:
+            filenames = os.listdir('./train/' + dir)
+            filenames = list(map(split_extension, filenames))
+            create_model_instance(filenames[0], 0)
+        elif dir in design_list:
+            pass
+        else:
+            pass
+

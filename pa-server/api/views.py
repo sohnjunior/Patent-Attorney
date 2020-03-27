@@ -2,18 +2,19 @@ from django.views.generic import View
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import ObjectDoesNotExist
+from django.forms.models import model_to_dict
 
 from .ai.utils import predict, object_detection
 
 import base64
 from io import BytesIO
 from PIL import Image
+from urllib.request import urlopen
 import json
-import os
 
+from .models import MarkPatentInfo, DesignPatentInfo
 from .utils import base64_encoder, parse_application_number
-
-STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -23,9 +24,14 @@ class MarkInfo(View):
     """
     def get(self, request, *args, **kwargs):
         query_app_num = str(self.kwargs.get('pk'))  # query application number
-        # parsed_data = request_open_api(application_number=query_app_num, mode=0) TODO 변경 필요
+        obj = MarkPatentInfo.objects.get(app_num=query_app_num)
+        data = model_to_dict(obj)
 
-        return JsonResponse(data=json.dumps(parsed_data), status=200, safe=False)
+        # date time json formatting
+        date = data['pub_date']
+        data['pub_date'] = date.strftime("%Y-%m-%d")
+
+        return JsonResponse(data=json.dumps(data), status=200, safe=False)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -35,9 +41,14 @@ class DesignInfo(View):
     """
     def get(self, request, *args, **kwargs):
         query_app_num = str(self.kwargs.get('pk'))  # query application number
-        # parsed_data = request_open_api(application_number=query_app_num, mode=1) TODO 변경 필요
+        obj = DesignPatentInfo.objects.get(app_num=query_app_num)
+        data = model_to_dict(obj)
 
-        return JsonResponse(data=json.dumps(parsed_data), status=200, safe=False)
+        # date time json formatting
+        date = data['pub_date']
+        data['pub_date'] = date.strftime("%Y-%m-%d")
+
+        return JsonResponse(data=json.dumps(data), status=200, safe=False)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -57,23 +68,27 @@ class PatentPredict(View):
             query_image, detected = object_detection(query_image=query_image)
         result = predict(query_image, request_num, detected)
 
-        # TODO model에 이미지 경로를 저장해놓으면 이미지를 static에 유지할 필요 없어짐.
-        # static folder 에 이미지 데이터 구성해놓고 결과 이미지 로드해서 반환해주기
         app_nums = []
         img_binary = []
         for info in result:
-            img_path = os.path.join(STATIC_PATH, info[1])
-
             # info[1] format: patent_image/train/닭/4020020037823.jpg
             app_num = parse_application_number(info[1])
             app_nums.append(app_num)
 
             # gray scale 로 읽히는 이미지들이 있어서 RGB 형식으로 바꿔줌
-            raw_image = Image.open(img_path).convert('RGB')
+            try:
+                if search_type == 0:
+                    obj = MarkPatentInfo.objects.get(app_num=app_num)
+                else:
+                    obj = DesignPatentInfo.objects.get(app_num=app_num)
+                url = obj.image_path
+                raw_image = Image.open(urlopen(url)).convert('RGB')
 
-            # convert PIL image to base64 string
-            img_str = base64_encoder(raw_image)
-            img_binary.append(img_str)
+                # convert PIL image to base64 string
+                img_str = base64_encoder(raw_image)
+                img_binary.append(img_str)
+            except ObjectDoesNotExist:
+                print('해당 출원번호에 해당하는 정보가 존재하지 않습니다.')
 
         # encoding request image to base64
         raw_image = Image.open(request.FILES['file']).convert('RGB')

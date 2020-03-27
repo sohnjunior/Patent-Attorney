@@ -4,6 +4,7 @@ myvenv/
 pa-server/db.sqlite3
 .idea/
 static/
+train/
 yolov3.cfg
 yolov3.weights
 deeprank.pt
