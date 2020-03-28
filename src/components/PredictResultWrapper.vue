@@ -50,17 +50,16 @@ export default {
       for(let idx = 0; idx < this.resultCount(queryIdx); idx++) {
         const obj = {
           imageData: this.resultImages(queryIdx)[idx],
-          title: this.resultInfos(queryIdx)[idx].title || this.resultInfos(queryIdx)[idx].articleName,
-          applicationStatus: this.resultInfos(queryIdx)[idx].applicationStatus,
-          applicantName: this.resultInfos(queryIdx)[idx].applicantName,
-          agentName: this.resultInfos(queryIdx)[idx].agentName,
-          publicationDate: this.resultInfos(queryIdx)[idx].publicationDate,
-          publicationNumber: this.resultInfos(queryIdx)[idx].publicationNumber,
+          title: this.resultInfos(queryIdx)[idx].title || this.resultInfos(queryIdx)[idx].article_name,
+          applicationStatus: this.resultInfos(queryIdx)[idx].app_status,
+          applicantName: this.resultInfos(queryIdx)[idx].app_name,
+          agentName: this.resultInfos(queryIdx)[idx].agent_name,
+          publicationDate: this.resultInfos(queryIdx)[idx].pub_date,
+          publicationNumber: this.resultInfos(queryIdx)[idx].pub_num,
         }
-
         this.items.push(obj);
       }
-      
+ 
       // set page count
       this.pageCount = Math.ceil(this.resultImages(queryIdx).length / this.itemsPerPage);
     });

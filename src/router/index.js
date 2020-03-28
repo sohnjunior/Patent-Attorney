@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import HomePage from '../views/HomePage.vue';
 import PredictPage from "../views/PredictPage.vue";
+import Store from '../store/index';
 
 Vue.use(VueRouter)
 
@@ -10,7 +11,13 @@ const router = new VueRouter({
     {
       path: '/',
       name: 'Home',
-      component: HomePage
+      component: HomePage,
+      beforeEnter: (to, from, next) => {
+        if(from.name === 'predict') {
+          Store.commit('initData');
+        }
+        next();
+      }
     },
     {
       path: '/predict',

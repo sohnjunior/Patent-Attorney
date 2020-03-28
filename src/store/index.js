@@ -30,6 +30,13 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    initData(state) {
+      state.requestImage = [];
+      state.resultCount = [];
+      state.resultImages = [];
+      state.resultAppNumbers = [];
+      state.resultPatentInfos = [];
+    },
     setResultCount(state, payload) {
       state.resultCount.push(payload.resultCount);
     },

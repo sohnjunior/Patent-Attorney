@@ -21,7 +21,7 @@ export default {
         { text:'상표이미지', value:'imageData', sortable: false, class: 'success--text subtitle-1', align:'center' },
         { text:'상표명', value:'title', sortable: false, class: 'success--text subtitle-1', align:'center' },
         { text:'출원상태', value:'applicationStatus', sortable: false, class: 'success--text subtitle-1', width: "100", align:'center' },
-        { text:'출원인이름', value:'applicantName', sortable: false, class: 'success--text subtitle-1', align:'center' },
+        { text:'출원인이름', value:'applicantName', sortable: false, class: 'success--text subtitle-1', width: "120", align:'center' },
         { text:'대리인이름', value:'agentName', sortable: false, class: 'success--text subtitle-1', align:'center' },
         { text:'공고일자', value:'publicationDate', sortable: false, class: 'success--text subtitle-1', align:'center' },
         { text:'공고번호', value:'publicationNumber', sortable: false, class: 'success--text subtitle-1', align:'center' },
