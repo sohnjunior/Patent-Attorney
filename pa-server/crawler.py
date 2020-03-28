@@ -52,8 +52,9 @@ def parse_xml(xml_string_data, category):
         result_code = header.find('resultCode').text
         error_msg = header.find('resultMsg').text
         print(f'특허청 호출 에러 코드[{result_code}] : {error_msg}')
+        return {}, False
 
-    return parsed
+    return parsed, True
 
 
 def make_query_string(application_number, mode):
@@ -108,49 +109,61 @@ def split_extension(filename):
     :param filename: 파일명
     :return: 출원번호
     """
-    return filename.split('.')[0]
+    filename = filename.split('.')[0]
+    if filename.find('M') != -1:
+        filename = filename.split('M')[0]
+    return filename
 
 
-def create_model_instance(app_num, mode):
+def create_model_instance(app_num, mode, category):
     """
     새로운 모델 인스턴스를 생성한다.
 
     :param app_num: 출원번호
     :param mode: 상표 or 디자인
+    :param category: 상품 분류 키워드
     :return: None
     """
-    data = request_open_api(app_num, mode)
+    data, success = request_open_api(app_num, mode)
 
-    # convert to YYYY-MM-DD format
-    pub_date = datetime.datetime.strptime(data['publicationDate'], "%Y%m%d").date()
+    if not success:
+        # api 호출 과정에서 문제가 발생한 데이터는 저장하지 않고 건너뛴다
+        return
 
     if mode == 0:
         obj, created = MarkPatentInfo.objects.get_or_create(title=data['title'], app_num=app_num, app_name=data['applicantName'],
-                                                            app_status=data['applicationStatus'], pub_date=pub_date,
-                                                            pub_num=data['publicationNumber'], image_path=data['bigDrawing'])
+                                                            agent_name=data['agentName'], app_status=data['applicationStatus'],
+                                                            pub_date=data['publicationDate'],pub_num=data['publicationNumber'],
+                                                            image_path=data['bigDrawing'], category=category)
     else:
-        obj, created = DesignPatentInfo.objects.get_or_create(article_name=data['title'], app_num=app_num,
+        obj, created = DesignPatentInfo.objects.get_or_create(article_name=data['articleName'], app_num=app_num, agent_name=data['agentName'],
                                                               app_name=data['applicantName'], app_status=data['applicationStatus'],
-                                                              pub_date=pub_date, pub_num=data['publicationNumber'], image_path=data['imagePathLarge'])
+                                                              pub_date=data['publicationDate'], pub_num=data['publicationNumber'],
+                                                              image_path=data['imagePathLarge'], category=category)
     if not created:
         print('duplicated object detected!', obj)
 
 
-# TODO 닭과 의자 특허 정보 db에 저장
+# TODO 특허 정보 db에 다시 저장
 from api.models import MarkPatentInfo, DesignPatentInfo
 
 if __name__ == '__main__':
-    mark_list = ['닭', '태양']
-    design_list = ['의자', '전기스탠드']
+    mark_list = ['태양']
+    design_list = ['의자']
     dirs = os.listdir('./train')
     for dir in dirs:
         dir = unicodedata.normalize('NFC', dir)
         if dir in mark_list:
             filenames = os.listdir('./train/' + dir)
             filenames = list(map(split_extension, filenames))
-            create_model_instance(filenames[0], 0)
+            for filename in filenames:
+                create_model_instance(filename, 0, dir)
         elif dir in design_list:
             pass
+            filenames = os.listdir('./train/' + dir)
+            filenames = list(map(split_extension, filenames))
+            for filename in filenames:
+                create_model_instance(filename, 1, dir)
         else:
             pass
 

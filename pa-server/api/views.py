@@ -27,10 +27,6 @@ class MarkInfo(View):
         obj = MarkPatentInfo.objects.get(app_num=query_app_num)
         data = model_to_dict(obj)
 
-        # date time json formatting
-        date = data['pub_date']
-        data['pub_date'] = date.strftime("%Y-%m-%d")
-
         return JsonResponse(data=json.dumps(data), status=200, safe=False)
 
 
@@ -43,10 +39,6 @@ class DesignInfo(View):
         query_app_num = str(self.kwargs.get('pk'))  # query application number
         obj = DesignPatentInfo.objects.get(app_num=query_app_num)
         data = model_to_dict(obj)
-
-        # date time json formatting
-        date = data['pub_date']
-        data['pub_date'] = date.strftime("%Y-%m-%d")
 
         return JsonResponse(data=json.dumps(data), status=200, safe=False)
 
