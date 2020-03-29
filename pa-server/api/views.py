@@ -61,26 +61,10 @@ class PatentPredict(View):
         result = predict(query_image, request_num, detected)
 
         app_nums = []
-        img_binary = []
         for info in result:
             # info[1] format: patent_image/train/닭/4020020037823.jpg
             app_num = parse_application_number(info[1])
             app_nums.append(app_num)
-
-            # gray scale 로 읽히는 이미지들이 있어서 RGB 형식으로 바꿔줌
-            try:
-                if search_type == 0:
-                    obj = MarkPatentInfo.objects.get(app_num=app_num)
-                else:
-                    obj = DesignPatentInfo.objects.get(app_num=app_num)
-                url = obj.image_path
-                raw_image = Image.open(urlopen(url)).convert('RGB')
-
-                # convert PIL image to base64 string
-                img_str = base64_encoder(raw_image)
-                img_binary.append(img_str)
-            except ObjectDoesNotExist:
-                print('해당 출원번호에 해당하는 정보가 존재하지 않습니다.')
 
         # encoding request image to base64
         raw_image = Image.open(request.FILES['file']).convert('RGB')
@@ -90,7 +74,6 @@ class PatentPredict(View):
         res = {
             "request_num": request_num,
             "request_image": query_image_base64,
-            "images": img_binary,
             "result_app_numbers": app_nums
         }
 
