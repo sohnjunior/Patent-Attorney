@@ -133,22 +133,21 @@ def create_model_instance(app_num, mode, category):
     if mode == 0:
         obj, created = MarkPatentInfo.objects.get_or_create(title=data['title'], app_num=app_num, app_name=data['applicantName'],
                                                             agent_name=data['agentName'], app_status=data['applicationStatus'],
-                                                            pub_date=data['publicationDate'],pub_num=data['publicationNumber'],
+                                                            pub_date=data['publicationDate'], pub_num=data['publicationNumber'],
                                                             image_path=data['bigDrawing'], category=category)
     else:
-        obj, created = DesignPatentInfo.objects.get_or_create(article_name=data['articleName'], app_num=app_num, agent_name=data['agentName'],
-                                                              app_name=data['applicantName'], app_status=data['applicationStatus'],
+        obj, created = DesignPatentInfo.objects.get_or_create(article_name=data['articleName'], app_num=app_num, app_name=data['applicantName'],
+                                                              agent_name=data['agentName'], app_status=data['applicationStatus'],
                                                               pub_date=data['publicationDate'], pub_num=data['publicationNumber'],
                                                               image_path=data['imagePathLarge'], category=category)
     if not created:
         print('duplicated object detected!', obj)
 
 
-# TODO 특허 정보 db에 다시 저장
 from api.models import MarkPatentInfo, DesignPatentInfo
 
 if __name__ == '__main__':
-    mark_list = ['태양']
+    mark_list = ['닭', '태양']
     design_list = ['의자']
     dirs = os.listdir('./train')
     for dir in dirs:
