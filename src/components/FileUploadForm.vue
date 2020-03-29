@@ -106,14 +106,13 @@ export default {
     settingStore(result) {
       this.$store.commit('setResultCount', { resultCount: result.request_num });
       this.$store.commit('setRequestImage', { imageData: result.request_image });
-      this.$store.commit('setResultImages', { imageData: result.images });
       this.$store.commit('setResultAppNum', { appNumbers: result.result_app_numbers });
     },
     async submitFile() {
       // spinner 작동
       this.submitFlag=true;
 
-      const resultArray = new Array();
+      const resultArray = [];
       for(let queryFile of this.inputFile) {
         let formData = new FormData();
         formData.append('file', queryFile);

@@ -2,7 +2,7 @@
   <div>
     <v-data-table :headers="headers" :items="items" :page.sync="page" :items-per-page="itemsPerPage" hide-default-footer class="elevation-1 custom-class">
     <template v-slot:item.imageData="{ item }">
-      <v-img :src="`data:image/jpeg;base64,${item.imageData}`" class="result-image"></v-img>
+      <v-img :src="item.imagePath" class="result-image"></v-img>
     </template>
     </v-data-table>
     <div class="text-xs-center pt-2">

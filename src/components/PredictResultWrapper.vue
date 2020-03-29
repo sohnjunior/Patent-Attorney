@@ -32,11 +32,6 @@ export default {
         return this.$store.getters.getResultCount(idx);
       }
     },
-    resultImages() {
-      return (idx) => {
-        return this.$store.getters.getResultImages(idx);
-      }
-    },
     resultInfos() {
       return (idx) => {
         return this.$store.getters.getPatentInfos(idx);
@@ -49,7 +44,7 @@ export default {
       const queryIdx = idx;
       for(let idx = 0; idx < this.resultCount(queryIdx); idx++) {
         const obj = {
-          imageData: this.resultImages(queryIdx)[idx],
+          imagePath: this.resultInfos(queryIdx)[idx].image_path,
           title: this.resultInfos(queryIdx)[idx].title || this.resultInfos(queryIdx)[idx].article_name,
           applicationStatus: this.resultInfos(queryIdx)[idx].app_status,
           applicantName: this.resultInfos(queryIdx)[idx].app_name,
@@ -59,9 +54,9 @@ export default {
         }
         this.items.push(obj);
       }
- 
+      
       // set page count
-      this.pageCount = Math.ceil(this.resultImages(queryIdx).length / this.itemsPerPage);
+      this.pageCount = Math.ceil(this.resultInfos(queryIdx).length / this.itemsPerPage);
     });
   },
   mounted() {
