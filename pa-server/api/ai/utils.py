@@ -14,7 +14,8 @@ from .net import DeepRank
 pre-processing component
 """
 data_transforms = transforms.Compose([
-        transforms.Resize((224, 224), interpolation=2),
+        transforms.Resize(256),
+        transforms.CenterCrop(224),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
@@ -54,6 +55,7 @@ def query_embedding(model, query_image_path, detected):
         query_image = Image.fromarray(query_image_path, 'RGB')
     else:
         query_image = Image.open(query_image_path).convert('RGB')
+
     query_image = data_transforms(query_image)
     query_image = query_image[None]  # add new axis
 
@@ -77,7 +79,7 @@ def predict(query_image, result_num, detected=False):
     model.load_state_dict(torch.load(MODEL_PATH, map_location=torch.device('cpu')))  # load model parameters
 
     # TODO 디자인 이미지와 상표 이미지 분리해서 트리플렛 및 임베딩 파일 유지
-    train_df = pd.read_csv(TRIPLET_PATH)
+    train_df = pd.read_csv(TRIPLET_PATH).drop_duplicates('query', keep='first').reset_index(drop=True)
     train_embedded = np.fromfile(EMBEDDING_PATH, dtype=np.float32).reshape(-1, 4096)
 
     # embedding query image
