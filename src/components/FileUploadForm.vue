@@ -128,7 +128,7 @@ export default {
       for(let result of resultArray) {
         this.settingStore(result);
       }
-
+      
       // 결과 이미지들의 특허 정보 호출
       if(this.toggled === 0) {
         await this.$store.dispatch('getMarkInfo');

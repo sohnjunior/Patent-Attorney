@@ -15,7 +15,7 @@ function requestMarkInfo(appNum) {
 }
 
 function requestDesignInfo(appNum) {
-  return instance.get(`/api/mark/detail/${appNum}/`);
+  return instance.get(`/api/design/detail/${appNum}/`);
 }
 
 export { requestImagePrediction, requestMarkInfo, requestDesignInfo }
