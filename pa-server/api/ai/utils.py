@@ -157,7 +157,7 @@ def object_detection(query_image):
         if i in indexes:
             (x, y, w, h) = boxes[i]
             src = img.copy()
-            crop_img = src[x:x+w, y:y+h]
+            crop_img = src[y:y + h, x:x + w]
             label = classes[class_indices[i]]
             print('query image detected: ' + label)
             return crop_img, True
