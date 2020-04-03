@@ -1,6 +1,6 @@
 <template>
 <v-container>
-  <v-footer :absolute="true" class="blue lighten-2" app>
+  <v-footer :absolute="true" class="transparent" app>
     <v-col class="text-center pt-0">
       <span class="white--text">손정현 박민춘 홍종현</span>
       <br>
