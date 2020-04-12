@@ -1,7 +1,7 @@
 <template>
   <v-app-bar class="transparent" app :flat="true">
     <router-link class="nav" to="/">
-      <v-toolbar-title>ImagePredict Service</v-toolbar-title>
+      <v-toolbar-title>Patent Info Service</v-toolbar-title>
     </router-link>
   </v-app-bar>
 </template>

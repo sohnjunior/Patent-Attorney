@@ -4,39 +4,44 @@
         <div class="bg-size rearrange"></div>
         <div class="bg-size rearrange"></div>
     </div>
-    <div class="bg bg-size arrange">
+      <div class="bg bg-size arrange">
         <div class="rearrange">
-            <div class="line arrange">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+          <div class="line arrange">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="view">
+            <InfoBox/>
+          </div>
         </div>
-    </div>
-    <div class="view">
-      <router-view></router-view>
-    </div>
+      </div>
+    <router-view></router-view>
   </v-app>
 </template>
 
 <script>
+  import InfoBox from "./components/InfoBox.vue";
 
+  export default {
+    components:{ InfoBox }
+  }
 </script>
 
 <style scoped>
 .bg-size{
-  min-height: 670px;
-  padding: 0 0;
+  min-height: 675px;
+  padding: 0px 0;
   overflow: hidden;
   margin-bottom: 0px;
 }
 .bg-back{
-  position: relative;
+  z-index: auto;
 }
 .bg-back div{
   background: linear-gradient(90deg, rgba(31,90,175,0.2), rgba(24,126,171,0.2), rgba(18,16,217,0.2));
@@ -56,6 +61,7 @@
 .bg{
   background:linear-gradient(90deg, rgba(99,251,249,1) 0%, rgba(59,145,254,1) 50%, rgba(60,26,173,1) 100%);
   position: relative;
+  z-index: auto;
 }
 .arrange {
   transform: skewY(-11deg);
@@ -116,17 +122,17 @@
   height: 10px;
   top: 520px;
   left: 4%;
-  background: linear-gradient(90deg, #ffffff14, #ffffff00);
+  background: linear-gradient(90deg, #0799fa6e, #ffffff00);
 }
 .line :nth-child(8){
   width: 10px;
   height: 10px;
   top: 520px;
   left: 2%;
-  background: #ffffff14;
+  background: #0875f18c;
 }
 .view{
-  position: absolute;
-  width: 1519px;
+  z-index: auto;
+  height: 792px;
 }
 </style>
