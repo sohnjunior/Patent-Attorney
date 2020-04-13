@@ -26,7 +26,7 @@
       <v-container fluid class="py-2">
         <v-row justify="center">
           <div>
-            <v-btn-toggle v-model="toggled">
+            <v-btn-toggle v-model="toggled" shaped color="light-blue accent-4">
               <v-btn>
                 상표
               </v-btn>
@@ -124,11 +124,11 @@ export default {
         resultArray.push(JSON.parse(data));
       }
 
-      // 파싱한 정보들을 store에 저장 
+      // 파싱한 정보들을 store에 저장
       for(let result of resultArray) {
         this.settingStore(result);
       }
-      
+
       // 결과 이미지들의 특허 정보 호출
       if(this.toggled === 0) {
         await this.$store.dispatch('getMarkInfo');
