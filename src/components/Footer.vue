@@ -1,10 +1,10 @@
 <template>
 <v-container>
-  <v-footer :fixed="true" class="transparent" app>
-    <v-col class="text-left pt-0">
+  <v-footer :fixed="true" class="transparent">
+    <v-col class="text-left">
       <span class="black--text">&copy; 2020</span>
     </v-col>
-    <v-col class="text-right pt-0">
+    <v-col class="text-right">
       <span class="black--text">손정현 박민춘 홍종현</span>
     </v-col>
   </v-footer>
