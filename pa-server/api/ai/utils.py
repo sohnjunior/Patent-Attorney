@@ -23,9 +23,14 @@ data_transforms = transforms.Compose([
 """
 path info
 """
-TRIPLET_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'triplet.csv')
-MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'deeprank.pt')
-EMBEDDING_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'embedding.txt')
+MARK_MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'deeprank.pt')  # TODO
+MARK_TRIPLET_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'triplet.csv')  # TODO
+MARK_EMBEDDING_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'embedding.txt')  # TODO
+
+DESIGN_MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'deeprank.pt')  # TODO
+DESIGN_TRIPLET_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'triplet.csv')  # TODO
+DESIGN_EMBEDDING_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'embedding.txt')  # TODO
+
 WEIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'yolov3.weights')
 CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'yolov3.cfg')
 
@@ -76,11 +81,18 @@ def predict(query_image, result_num, detected=False):
     :return: similar images
     """
     model = DeepRank()
-    model.load_state_dict(torch.load(MODEL_PATH, map_location=torch.device('cpu')))  # load model parameters
 
-    # TODO 디자인 이미지와 상표 이미지 분리해서 트리플렛 및 임베딩 파일 유지
-    train_df = pd.read_csv(TRIPLET_PATH).drop_duplicates('query', keep='first').reset_index(drop=True)
-    train_embedded = np.fromfile(EMBEDDING_PATH, dtype=np.float32).reshape(-1, 4096)
+    # 디자인 이미지와 상표 이미지 분리해서 트리플렛 및 임베딩 파일 유지
+    if detected:
+        ''' 상표 이미지 '''
+        model.load_state_dict(torch.load(MARK_MODEL_PATH, map_location=torch.device('cpu')))  # load model
+        train_df = pd.read_csv(MARK_TRIPLET_PATH).drop_duplicates('query', keep='first').reset_index(drop=True)
+        train_embedded = np.fromfile(MARK_EMBEDDING_PATH, dtype=np.float32).reshape(-1, 4096)
+    else:
+        ''' 디자인 이미지 '''
+        model.load_state_dict(torch.load(DESIGN_MODEL_PATH, map_location=torch.device('cpu')))  # load model
+        train_df = pd.read_csv(DESIGN_TRIPLET_PATH).drop_duplicates('query', keep='first').reset_index(drop=True)
+        train_embedded = np.fromfile(DESIGN_EMBEDDING_PATH, dtype=np.float32).reshape(-1, 4096)
 
     # embedding query image
     query_embedded = query_embedding(model, query_image, detected)
