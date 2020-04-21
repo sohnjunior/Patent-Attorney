@@ -2,15 +2,11 @@ from django.views.generic import View
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import model_to_dict
 
-from .ai.utils import predict, object_detection
+from .research import predict, object_detection
 
-import base64
-from io import BytesIO
 from PIL import Image
-from urllib.request import urlopen
 import json
 
 from .models import MarkPatentInfo, DesignPatentInfo
