@@ -12,6 +12,7 @@ embedding.txt
 triplet.csv
 node_modules/
 /dist
+api/assets/
 pa-server/config/secrets.json
 
 ### Django ###

@@ -25,14 +25,6 @@ data_transforms = transforms.Compose([
 """
 path info 
 """
-MARK_MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/deeprank.pt')  # TODO
-MARK_TRIPLET_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/triplet.csv')  # TODO
-MARK_EMBEDDING_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/embedding.txt')  # TODO
-
-DESIGN_MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/deeprank.pt')  # TODO
-DESIGN_TRIPLET_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/triplet.csv')  # TODO
-DESIGN_EMBEDDING_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/embedding.txt')  # TODO
-
 WEIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/yolov3.weights')
 CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/yolov3.cfg')
 
@@ -83,22 +75,18 @@ def predict(query_image, result_num, detected=False):
     :return: similar images
     """
 
-    # TODO 디자인 이미지와 상표 이미지 분리해서 트리플렛 및 임베딩 파일 유지
+    # 디자인과 상표 이미지 분리해서 트리플렛 및 임베딩 파일 관리
     if detected:
         ''' 상표 이미지 '''
-        train_df = pd.read_csv(MARK_TRIPLET_PATH).drop_duplicates('query', keep='first').reset_index(drop=True)
-        train_embedded = np.fromfile(MARK_EMBEDDING_PATH, dtype=np.float32).reshape(-1, 4096)
+        query_embedded = query_embedding(ApiConfig.core['mark_model'], query_image, detected)
+        train_embedded = np.frombuffer(ApiConfig.core['mark_embedding'], dtype=np.float32).reshape(-1, 4096)
+        train_df = pd.read_csv(ApiConfig.core['mark_triplet']).drop_duplicates('query', keep='first').reset_index(drop=True)
+
     else:
         ''' 디자인 이미지 '''
-        train_df = pd.read_csv(DESIGN_TRIPLET_PATH).drop_duplicates('query', keep='first').reset_index(drop=True)
-        train_embedded = np.fromfile(DESIGN_EMBEDDING_PATH, dtype=np.float32).reshape(-1, 4096)
-
-    # embedding query image
-    if detected:
-        query_embedded = query_embedding(ApiConfig.model, query_image, detected)
-    else:
-        # TODO 디자인 전용 모델 s3에 올리고 로드해서 파라미터 변경하기
-        query_embedded = query_embedding(ApiConfig.model, query_image, detected)
+        query_embedded = query_embedding(ApiConfig.core['mark_model'], query_image, detected)
+        train_embedded = np.frombuffer(ApiConfig.core['design_embedding'], dtype=np.float32).reshape(-1, 4096)
+        train_df = pd.read_csv(ApiConfig.core['design_triplet']).drop_duplicates('query', keep='first').reset_index(drop=True)
 
     #  by euclidean distance, find top ranked similar images
     image_dist = euclidean_distance(train_embedded, query_embedded)
