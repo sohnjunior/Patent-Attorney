@@ -13,8 +13,6 @@ s3_target_list = {
     'design_model': 'model/deeprank.pt',
     'design_triplet': 'triplet/triplet.csv',
     'design_embedding': 'embedding/embedding.txt',
-    'yolo_cfg': 'yolo/yolov3.cfg',
-    'yolo_weights': 'yolo/yolov3.weights',
 }
 
 

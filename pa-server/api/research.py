@@ -22,11 +22,11 @@ data_transforms = transforms.Compose([
     ])
 
 
-"""
-path info 
-"""
+# ---------------------------
+# YOLO config file path info
 WEIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/yolov3.weights')
 CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/yolov3.cfg')
+# ---------------------------
 
 
 def euclidean_distance(x, y):
