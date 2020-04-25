@@ -3,10 +3,10 @@
     <v-content>
       <v-container class="fill-height">
           <div class="text">
-          <v-row class="black--text mx-auto" align="start">
-            <v-col class="black--text text-center" cols="12" tag="h1">
-              <span class="font-weight-black display-1">
-                <h1>Patent Info Service</h1>
+          <v-row class="white--text mx-auto" align="start">
+            <v-col class="white--text text-center" cols="12" tag="h1">
+              <span style="color: rgb(250, 245, 245)">
+                <h1>특허 유사도 분석 서비스</h1>
               </span>
               <br>
               <span>
@@ -34,7 +34,6 @@ export default {}
 .text{
   width: 100%;
   height: 100%;
-  color: black;
   text-align: center;
   align-items: center;
   justify-content: center;
