@@ -13,7 +13,7 @@
                 <h4 class="font-weight-thin">BY PANG'S</h4>
               </span>
               <br>
-              <p class="font-weight-thin">
+              <p class="font-weight-thin" id="explain">
                 Patent Image similarity analysis service
                 <br>
                 using deep-ranking algorithm
@@ -31,6 +31,15 @@ export default {}
 </script>
 
 <style scoped>
+#explain {
+  animation: fadein 2s;
+}
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(2em) }
+  to { opacity: 1; transform: translateY(0em) }
+}
+
 .text{
   width: 100%;
   height: 100%;

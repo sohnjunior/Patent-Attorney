@@ -4,24 +4,26 @@
         <div class="bg-size rearrange"></div>
         <div class="bg-size rearrange"></div>
     </div>
-      <div class="bg bg-size arrange">
-        <div class="rearrange">
-          <div class="line arrange">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-          <div class="view">
-            <InfoBox/>
-          </div>
+    <div class="bg bg-size arrange">
+      <div class="rearrange">
+        <div class="line arrange">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="view">
+          <InfoBox/>
         </div>
       </div>
-    <router-view></router-view>
+    </div>
+    <transition name="slide-fade">
+      <router-view></router-view>
+    </transition>
   </v-app>
 </template>
 
@@ -34,6 +36,14 @@
 </script>
 
 <style scoped>
+.slide-fade-enter-active {
+  transition: all .7s cubic-bezier(0.42, 0.0, 0.58, 1.0);
+}
+
+.slide-fade-enter, .slide-fade-leave-to {
+  opacity: 0;
+}
+
 .bg-size{
   min-height: 675px;
   padding: 0px 0;
