@@ -8,11 +8,7 @@ from django.conf import settings
 
 s3_target_list = {
     'mark_model': 'model/deeprank.pt',
-    'mark_triplet': 'triplet/triplet.csv',
-    'mark_embedding': 'embedding/embedding.txt',
     'design_model': 'model/deeprank.pt',
-    'design_triplet': 'triplet/triplet.csv',
-    'design_embedding': 'embedding/embedding.txt',
 }
 
 
@@ -48,14 +44,7 @@ class ApiConfig(AppConfig):
         # read data from s3
         for target, data in response.items():
             body = response[target]['Body'].read()
-
-            if target.endswith('model'):
-                stream = BytesIO(body)
-                ApiConfig.core[target].load_state_dict(torch.load(stream))  # load parameter data
-            elif target.endswith('triplet'):
-                stream = BytesIO(body)
-                ApiConfig.core[target] = stream
-            else:
-                ApiConfig.core[target] = body
+            stream = BytesIO(body)
+            ApiConfig.core[target].load_state_dict(torch.load(stream))  # load parameter data
 
             print(f'read {target} data from s3')

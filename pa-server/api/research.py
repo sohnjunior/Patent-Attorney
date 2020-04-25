@@ -23,7 +23,11 @@ data_transforms = transforms.Compose([
 
 
 # ---------------------------
-# YOLO config file path info
+# config file path info
+MARK_TRIPLET_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/triplet.csv')
+DESIGN_TRIPLET_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/triplet.csv')
+MARK_EMBEDDING_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/embedding.txt')
+DESIGN_EMBEDDING_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/embedding.txt')
 WEIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/yolov3.weights')
 CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/yolov3.cfg')
 # ---------------------------
@@ -79,14 +83,14 @@ def predict(query_image, result_num, detected=False):
     if detected:
         ''' 상표 이미지 '''
         query_embedded = query_embedding(ApiConfig.core['mark_model'], query_image, detected)
-        train_embedded = np.frombuffer(ApiConfig.core['mark_embedding'], dtype=np.float32).reshape(-1, 4096)
-        train_df = pd.read_csv(ApiConfig.core['mark_triplet']).drop_duplicates('query', keep='first').reset_index(drop=True)
+        train_embedded = np.fromfile(MARK_EMBEDDING_PATH, dtype=np.float32).reshape(-1, 4096)
+        train_df = pd.read_csv(MARK_TRIPLET_PATH).drop_duplicates('query', keep='first').reset_index(drop=True)
 
     else:
         ''' 디자인 이미지 '''
         query_embedded = query_embedding(ApiConfig.core['mark_model'], query_image, detected)
-        train_embedded = np.frombuffer(ApiConfig.core['design_embedding'], dtype=np.float32).reshape(-1, 4096)
-        train_df = pd.read_csv(ApiConfig.core['design_triplet']).drop_duplicates('query', keep='first').reset_index(drop=True)
+        train_embedded = np.fromfile(DESIGN_EMBEDDING_PATH, dtype=np.float32).reshape(-1, 4096)
+        train_df = pd.read_csv(DESIGN_TRIPLET_PATH).drop_duplicates('query', keep='first').reset_index(drop=True)
 
     #  by euclidean distance, find top ranked similar images
     image_dist = euclidean_distance(train_embedded, query_embedded)
