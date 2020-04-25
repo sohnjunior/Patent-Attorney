@@ -2,7 +2,17 @@
   <div>
     <v-data-table :headers="headers" :items="items" :page.sync="page" :items-per-page="itemsPerPage" hide-default-footer class="elevation-1 custom-class">
     <template v-slot:item.imageData="{ item }">
-      <v-img :src="item.imagePath" class="result-image"></v-img>
+      <v-img :src="item.imagePath" class="result-image">
+        <template v-slot:placeholder>
+          <v-row
+            class="fill-height ma-0"
+            align="center"
+            justify="center"
+          >
+            <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+          </v-row>
+        </template>
+      </v-img>
     </template>
     </v-data-table>
     <div class="text-xs-center pt-2">

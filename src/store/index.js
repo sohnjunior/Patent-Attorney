@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { requestMarkInfo, requestDesignInfo } from '../api/index';
+import createPersistedState from 'vuex-persistedstate'
+import { requestMarkInfo, requestDesignInfo } from '../api/index'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  plugins: [createPersistedState()],
   state: {
     requestImage: [], // 사용자가 요청한 이미지(base64)
     resultCount: [], // 사용자가 요청한 이미지 개수
