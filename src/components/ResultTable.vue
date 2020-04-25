@@ -2,14 +2,17 @@
   <div>
     <v-data-table :headers="headers" :items="items" :page.sync="page" :items-per-page="itemsPerPage" hide-default-footer class="elevation-1 custom-class">
     <template v-slot:item.imageData="{ item }">
-      <v-img :src="item.imagePath" class="result-image">
+      <v-img
+        :lazy-src="require('../images/loading.png')"
+        :src="item.imagePath" 
+        class="result-image">
         <template v-slot:placeholder>
           <v-row
             class="fill-height ma-0"
             align="center"
             justify="center"
           >
-            <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+            <v-progress-circular indeterminate color="blue lighten-3"></v-progress-circular>
           </v-row>
         </template>
       </v-img>
@@ -28,13 +31,13 @@ export default {
     return {
       page: 1,
       headers:[
-        { text:'상표이미지', value:'imageData', sortable: false, class: 'success--text subtitle-1', align:'center' },
-        { text:'상표명', value:'title', sortable: false, class: 'success--text subtitle-1', align:'center' },
-        { text:'출원상태', value:'applicationStatus', sortable: false, class: 'success--text subtitle-1', width: "100", align:'center' },
-        { text:'출원인이름', value:'applicantName', sortable: false, class: 'success--text subtitle-1', width: "120", align:'center' },
-        { text:'대리인이름', value:'agentName', sortable: false, class: 'success--text subtitle-1', align:'center' },
-        { text:'공고일자', value:'publicationDate', sortable: false, class: 'success--text subtitle-1', align:'center' },
-        { text:'공고번호', value:'publicationNumber', sortable: false, class: 'success--text subtitle-1', align:'center' },
+        { text:'상표이미지', value:'imageData', sortable: false, class: 'blue--text subtitle-1', align:'center' },
+        { text:'상표명', value:'title', sortable: false, class: 'blue--text subtitle-1', align:'center' },
+        { text:'출원상태', value:'applicationStatus', sortable: false, class: 'blue--text subtitle-1', width: "100", align:'center' },
+        { text:'출원인이름', value:'applicantName', sortable: false, class: 'blue--text subtitle-1', width: "120", align:'center' },
+        { text:'대리인이름', value:'agentName', sortable: false, class: 'blue--text subtitle-1', align:'center' },
+        { text:'공고일자', value:'publicationDate', sortable: false, class: 'blue--text subtitle-1', align:'center' },
+        { text:'공고번호', value:'publicationNumber', sortable: false, class: 'blue--text subtitle-1', align:'center' },
       ],
     }
   },
