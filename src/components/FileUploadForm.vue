@@ -38,10 +38,17 @@
         </v-row>
       </v-container>
 
-      <v-container fluid class="py-2">
+      <v-container>
         <v-row justify="center">
           <div v-if="!submitFlag">
-            <v-btn id="submit-button" :disabled="!uploadDone" outlined color="indigo" type="submit" @click="submitFile" >검색</v-btn>
+            <v-btn 
+              class="white--text"
+              :disabled="!uploadDone" 
+              rounded 
+              x-large 
+              color="red lighten-3" 
+              type="submit" 
+              @click="submitFile" ><b>유사한 특허 확인하기</b></v-btn>
           </div>
           <div v-else>
             <v-progress-circular indeterminate :rotate="20" :size="40" :width="5" color="light-blue"></v-progress-circular>
@@ -147,9 +154,5 @@ export default {
 #dropzone {
   width: 65%;
   margin: 0 auto;
-}
-#submit-button {
-  width: 5rem;
-  height: 3rem;
 }
 </style>
