@@ -6,13 +6,14 @@
           :options="dropzoneOptions"
           :useCustomSlot="true"
           :duplicateCheck="true"
+          @vdropzone-removed-file="fileRemoved"
           @vdropzone-duplicate-file="duplicateUpload"
           @vdropzone-max-files-exceeded="fileLimitExceeded"
           @vdropzone-file-added="fileAdded"
           @vdropzone-queue-complete="queueComplete">
-          <div class="dropzone-custom-content">
-            <h3 class="dropzone-custom-title">Drag and drop to upload content!</h3>
-            <div class="subtitle">...or click to select a file from your computer</div>
+          <div>
+            <h3 class="dropzone-custom-title">Drag and drop</h3>
+            <div class="subtitle">...or click here to select a file</div>
           </div>
         </vue2Dropzone>
       </v-container>
@@ -43,7 +44,7 @@
           <div v-if="!submitFlag">
             <v-btn 
               class="white--text"
-              :disabled="!uploadDone" 
+              :disabled="!uploadDone || !fileExist" 
               rounded 
               x-large 
               color="red lighten-3" 
@@ -85,11 +86,26 @@ export default {
       warningText: '',
     }
   },
+  computed: {
+    fileExist() {
+      if (this.inputFile.length == 0) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  },
   methods: {
     // dropzone 이벤트 관련 메소드
     fileAdded(file) {
       this.uploadDone = false;
       this.inputFile.push(file);
+    },
+    fileRemoved(file) {
+      const idx = this.inputFile.indexOf(file);
+      if(idx > -1) {
+        this.inputFile.splice(idx, 1);
+      }
     },
     queueComplete() {
       this.uploadDone = true;
@@ -154,5 +170,12 @@ export default {
 #dropzone {
   width: 65%;
   margin: 0 auto;
+}
+.dropzone-custom-title {
+  margin-top: 0;
+  color: #00b782;
+}
+.subtitle {
+  color: #314b5f;
 }
 </style>
