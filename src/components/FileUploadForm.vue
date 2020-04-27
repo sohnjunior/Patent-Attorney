@@ -24,19 +24,23 @@
         </v-row>
       </v-container>
 
-      <v-container fluid class="py-2">
-        <v-row justify="center">
-          <div>
-            <v-btn-toggle v-model="toggled" shaped color="light-blue accent-4">
-              <v-btn>
-                상표
-              </v-btn>
-              <v-btn>
-                디자인
-              </v-btn>
-            </v-btn-toggle>
+      <v-container>
+       <section>
+          <div class="radio-box">
+            <input type="radio" id="control_01" name="select" value="1" checked @click="toggleClicked(0)">
+            <label for="control_01">
+              <v-icon large>mdi-trademark</v-icon>
+              <h4>상표 이미지</h4>
+            </label>
           </div>
-        </v-row>
+          <div class="radio-box">
+            <input type="radio" id="control_02" name="select" value="2" @click="toggleClicked(1)">
+            <label for="control_02">
+              <v-icon large>mdi-desk</v-icon>
+              <h4>디자인 이미지</h4>
+            </label>
+          </div>
+        </section>
       </v-container>
 
       <v-container>
@@ -124,7 +128,9 @@ export default {
       this.uploadDone = true;
       this.showAlert = false;
     },
-
+    toggleClicked(type) {
+      this.toggled = type;
+    },
     // 파일 업로드 관련 메소드
     settingStore(result) {
       this.$store.commit('setResultCount', { resultCount: result.request_num });
@@ -166,7 +172,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #dropzone {
   width: 65%;
   margin: 0 auto;
@@ -178,4 +184,48 @@ export default {
 .subtitle {
   color: #314b5f;
 }
+
+section {
+  width: 30em;
+  display: flex;
+  margin: 0 auto;
+}
+section > div {
+  flex: 0.5;
+  padding: 1rem;
+}
+.radio-box {
+  width: 600px;
+}
+input[type="radio"] {
+  display: none;
+  &:not(:disabled) ~ label {
+    cursor: pointer;
+  }
+  &:disabled ~ label {
+    color: hsla(150, 5%, 75%, 1);
+    border-color: hsla(150, 5%, 75%, 1);
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+}
+label {
+  height: 100%;
+  display: block;
+  color: #3f5566;
+  background: white;
+  border: 1px solid hsla(150, 75%, 50%, 1);
+  border-radius: 20px;
+  padding: 1.7rem;
+  text-align: center;
+  box-shadow: 0px 3px 10px -2px hsla(150, 5%, 65%, 0.5);
+  position: relative;
+}
+input[type="radio"]:checked + label {
+  background: hsla(150, 75%, 50%, 1);
+  color: hsla(215, 0%, 100%, 1);
+  box-shadow: 0px 0px 20px hsla(150, 100%, 50%, 0.75);
+  
+}
+
 </style>
