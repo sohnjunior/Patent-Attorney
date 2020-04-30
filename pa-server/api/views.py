@@ -54,11 +54,11 @@ class PatentPredict(View):
         detected = False
         if search_type == 0:
             query_image, detected = object_detection(query_image=query_image)
-        result = predict(query_image, request_num, detected)
+        result = predict(query_image, request_num, search_type, detected)
 
         app_nums = []
         for info in result:
-            # info[1] format: patent_image/train/닭/4020020037823.jpg
+            # info[1] format: 4020020037823.jpg
             app_num = parse_application_number(info[1])
             app_nums.append(app_num)
 

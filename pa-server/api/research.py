@@ -1,8 +1,6 @@
 import os
 from torchvision import transforms
 from PIL import Image
-from collections import OrderedDict
-import pandas as pd
 import numpy as np
 import torch
 import cv2
@@ -24,8 +22,8 @@ data_transforms = transforms.Compose([
 
 # ---------------------------
 # config file path info
-MARK_TRIPLET_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/triplet.csv')
-DESIGN_TRIPLET_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/triplet.csv')
+MARK_NUMBERS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/mark_numbers.txt')
+DESIGN_NUMBERS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/mark_numbers.txt')
 MARK_EMBEDDING_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/embedding.txt')
 DESIGN_EMBEDDING_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/embedding.txt')
 WEIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/yolov3.weights')
@@ -69,28 +67,32 @@ def query_embedding(model, query_image_path, detected):
     return embedding.cpu().detach().numpy()
 
 
-def predict(query_image, result_num, detected=False):
+def predict(query_image, result_num, image_type, detected=False):
     """
     요청 이미지를 통해 가장 유사한 이미지들을 찾는다.
 
     :param query_image: requested image (base64)
     :param result_num: requested number
+    :param image_type: mark or design image
     :param detected: processed object-detection
     :return: similar images
     """
 
     # 디자인과 상표 이미지 분리해서 트리플렛 및 임베딩 파일 관리
-    if detected:
+    if image_type == 0:
         ''' 상표 이미지 '''
         query_embedded = query_embedding(ApiConfig.core['mark_model'], query_image, detected)
         train_embedded = np.fromfile(MARK_EMBEDDING_PATH, dtype=np.float32).reshape(-1, 4096)
-        train_df = pd.read_csv(MARK_TRIPLET_PATH).drop_duplicates('query', keep='first').reset_index(drop=True)
-
+        f = open(MARK_NUMBERS_PATH, 'r')
     else:
         ''' 디자인 이미지 '''
-        query_embedded = query_embedding(ApiConfig.core['mark_model'], query_image, detected)
+        query_embedded = query_embedding(ApiConfig.core['design_model'], query_image, detected)
         train_embedded = np.fromfile(DESIGN_EMBEDDING_PATH, dtype=np.float32).reshape(-1, 4096)
-        train_df = pd.read_csv(DESIGN_TRIPLET_PATH).drop_duplicates('query', keep='first').reset_index(drop=True)
+        f = open(DESIGN_NUMBERS_PATH, 'r')
+
+    # 출원번호 읽어오기
+    app_nums = f.readlines()
+    app_nums = list(map(lambda s: s.strip(), app_nums))
 
     #  by euclidean distance, find top ranked similar images
     image_dist = euclidean_distance(train_embedded, query_embedded)
@@ -98,7 +100,7 @@ def predict(query_image, result_num, detected=False):
     image_dist_sorted = sorted(image_dist_indexed, key=lambda x: x[0])
 
     # top related images
-    predicted_images = [(img[0], train_df.loc[img[1], "query"]) for img in image_dist_sorted[:result_num]]
+    predicted_images = [(img[0], app_nums[img[1]]) for img in image_dist_sorted[:result_num]]
 
     return predicted_images
 
