@@ -28,7 +28,7 @@ DATABASE_PASSWORD = get_secret("DATABASE_PASSWORD")
 # ----------------------------------------- #
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['.ap-northeast-2.compute.amazonaws.com', '127.0.0.1']
 
@@ -129,6 +129,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # django cors setting
 
