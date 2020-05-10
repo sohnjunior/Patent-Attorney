@@ -9,23 +9,25 @@ import base64
 from .net import DeepRank
 from .apps import ApiConfig
 
-"""
-pre-processing component
-"""
+
+# ---------------------------
+# pre-processing component
 data_transforms = transforms.Compose([
         transforms.Resize(256),
         transforms.CenterCrop(224),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
-
+# ---------------------------
 
 # ---------------------------
 # config file path info
+MARK_MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/mark.pt')
+DESIGN_MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/design.pt')
 MARK_NUMBERS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/mark_numbers.txt')
-DESIGN_NUMBERS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/mark_numbers.txt')
-MARK_EMBEDDING_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/embedding.txt')
-DESIGN_EMBEDDING_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/embedding.txt')
+DESIGN_NUMBERS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/design_numbers.txt')
+MARK_EMBEDDING_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/mark_embedding.txt')
+DESIGN_EMBEDDING_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/design_embedding.txt')
 WEIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/yolov3.weights')
 CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/yolov3.cfg')
 # ---------------------------
@@ -78,19 +80,22 @@ def predict(query_image, result_num, image_type, detected=False):
     :return: similar images
     """
 
+    model = DeepRank()
+
     # 디자인과 상표 이미지 분리해서 트리플렛 및 임베딩 파일 관리
     if image_type == 0:
         ''' 상표 이미지 '''
-        query_embedded = query_embedding(ApiConfig.core['mark_model'], query_image, detected)
+        model.load_state_dict(torch.load(MARK_MODEL_PATH, map_location=torch.device('cpu')))
+        query_embedded = query_embedding(model, query_image, detected)
         train_embedded = np.fromfile(MARK_EMBEDDING_PATH, dtype=np.float32).reshape(-1, 4096)
         f = open(MARK_NUMBERS_PATH, 'r')
     else:
         ''' 디자인 이미지 '''
-        query_embedded = query_embedding(ApiConfig.core['design_model'], query_image, detected)
+        model.load_state_dict(torch.load(DESIGN_MODEL_PATH, map_location=torch.device('cpu')))
+        query_embedded = query_embedding(model, query_image, detected)
         train_embedded = np.fromfile(DESIGN_EMBEDDING_PATH, dtype=np.float32).reshape(-1, 4096)
         f = open(DESIGN_NUMBERS_PATH, 'r')
 
-    # 출원번호 읽어오기
     app_nums = f.readlines()
     app_nums = list(map(lambda s: s.strip(), app_nums))
 
@@ -106,7 +111,7 @@ def predict(query_image, result_num, image_type, detected=False):
 
 
 # object detection 대상 클래스 레이블
-classes = ['chicken']
+classes = ['chicken', 'pig']
 
 
 def object_detection(query_image):

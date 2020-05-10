@@ -28,7 +28,7 @@ def get_secret(setting, secrets=secrets):
         raise ImproperlyConfigured(error_msg)
 
 
-def parse_xml(xml_string_data, category):
+def parse_xml(app_num, xml_string_data, category):
     """ xml 데이터를 파싱해서 필요한 데이터만 추출 """
     root = elemTree.fromstring(xml_string_data)
 
@@ -51,7 +51,7 @@ def parse_xml(xml_string_data, category):
         header = root.find('header')
         result_code = header.find('resultCode').text
         error_msg = header.find('resultMsg').text
-        print(f'특허청 호출 에러 코드[{result_code}] : {error_msg}')
+        print(f'{app_num} 특허청 호출 에러 코드[{result_code}] : {error_msg}')
         return {}, False
 
     return parsed, True
@@ -99,7 +99,7 @@ def request_open_api(application_number, mode):
     # parse xml data
     # 상표명 혹은 물품 명칭, 이미지 url, 출원인이름, 대리인이름, 출원상태, 공고일자, 공고번호
     category += ['applicantName', 'agentName', 'applicationStatus', 'publicationDate', 'publicationNumber']
-    return parse_xml(xml_string_data=response_body.decode('utf-8'), category=category)
+    return parse_xml(app_num=application_number, xml_string_data=response_body.decode('utf-8'), category=category)
 
 
 def split_extension(filename):
@@ -147,8 +147,8 @@ def create_model_instance(app_num, mode, category):
 from api.models import MarkPatentInfo, DesignPatentInfo
 
 if __name__ == '__main__':
-    mark_list = ['닭', '태양']
-    design_list = ['의자']
+    mark_list = []
+    design_list = ['도자기']
     dirs = os.listdir('./train')
     for dir in dirs:
         dir = unicodedata.normalize('NFC', dir)
@@ -158,10 +158,11 @@ if __name__ == '__main__':
             for filename in filenames:
                 create_model_instance(filename, 0, dir)
         elif dir in design_list:
-            pass
             filenames = os.listdir('./train/' + dir)
             filenames = list(map(split_extension, filenames))
-            for filename in filenames:
+            for count, filename in enumerate(filenames):
+                if count == 100:
+                    break
                 create_model_instance(filename, 1, dir)
         else:
             pass

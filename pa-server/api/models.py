@@ -16,7 +16,7 @@ class CommonInfo(models.Model):
 
 
 class MarkPatentInfo(CommonInfo):
-    title = models.CharField(max_length=64)
+    title = models.CharField(max_length=128)
 
     def __str__(self):
         return self.app_num

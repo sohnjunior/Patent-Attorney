@@ -22,8 +22,9 @@ def get_secret(setting, secrets=secrets):
 
 # -----------   SECRETKEY LIST  ----------- #
 SECRET_KEY = get_secret("SECRET_KEY")
-S3_ACCESS_KEY = get_secret("S3_ACCESS_KEY")
-S3_SECRET_KEY = get_secret("S3_SECRET_KEY")
+DATABASE_NAME = get_secret("DATABASE_NAME")
+DATABASE_USER = get_secret("DATABASE_USER")
+DATABASE_PASSWORD = get_secret("DATABASE_PASSWORD")
 # ----------------------------------------- #
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -82,9 +83,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'patentattorney',
-        'USER': 'admin',
-        'PASSWORD': 'wjdgus090!',
+        'NAME': DATABASE_NAME,
+        'USER': DATABASE_USER,
+        'PASSWORD': DATABASE_PASSWORD,
         'HOST': 'django-patentattorney.cxsknuyyabfv.ap-northeast-2.rds.amazonaws.com',
         'PORT': '3306',
         'OPTIONS': {
@@ -131,7 +132,7 @@ STATIC_URL = '/static/'
 
 # django cors setting
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1:8080',
     'http://localhost:8080',
