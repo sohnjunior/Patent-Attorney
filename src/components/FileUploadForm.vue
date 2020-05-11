@@ -74,7 +74,7 @@ export default {
     return {
       inputFile: [],
       submitFlag: false,
-      selected: 5,
+      selected: 10,
       toggled: 0,
       uploadDone: false,
       dropzoneOptions: {

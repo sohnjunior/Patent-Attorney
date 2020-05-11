@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://127.0.0.1:8000/'
+  baseURL: 'http://ec2-54-180-26-144.ap-northeast-2.compute.amazonaws.com',
+  xsrfCookieName: 'csrftoken',
+  xsrfHeaderName: 'X-CSRFToken',
 });
 
 function requestImagePrediction(formData) {
