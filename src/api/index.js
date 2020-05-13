@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://ec2-54-180-26-144.ap-northeast-2.compute.amazonaws.com',
+  baseURL: 'http://ec2-54-180-26-144.ap-northeast-2.compute.amazonaws.com/',
   xsrfCookieName: 'csrftoken',
   xsrfHeaderName: 'X-CSRFToken',
 });
