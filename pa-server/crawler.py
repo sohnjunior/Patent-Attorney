@@ -148,7 +148,7 @@ from api.models import MarkPatentInfo, DesignPatentInfo
 
 if __name__ == '__main__':
     mark_list = []
-    design_list = ['도자기']
+    design_list = ['의자']
     dirs = os.listdir('./train')
     for dir in dirs:
         dir = unicodedata.normalize('NFC', dir)
@@ -160,6 +160,7 @@ if __name__ == '__main__':
         elif dir in design_list:
             filenames = os.listdir('./train/' + dir)
             filenames = list(map(split_extension, filenames))
+            filenames.sort()
             for count, filename in enumerate(filenames):
                 if count == 100:
                     break

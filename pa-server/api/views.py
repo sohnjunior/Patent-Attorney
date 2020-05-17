@@ -52,8 +52,8 @@ class PatentPredict(View):
         # deep ranking
         # search type 에 따라 object detection 수행
         detected = False
-        if search_type == 0:
-            query_image, detected = object_detection(query_image=query_image)
+        # if search_type == 0:
+        #     query_image, detected = object_detection(query_image=query_image)
         result = predict(query_image, request_num, search_type, detected)
 
         app_nums = []
