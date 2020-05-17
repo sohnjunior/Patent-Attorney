@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-data-table :headers="headers" :items="items" :page.sync="page" :items-per-page="itemsPerPage" hide-default-footer class="elevation-1 tablestyle">
+    <v-data-table :headers="headers" :items="items" :page.sync="page" :items-per-page="itemsPerPage" hide-default-footer class="elevation-1 table-style">
     <template v-slot:item.imageData="{ item }">
       <v-img
         :lazy-src="require('../images/loading.png')"
@@ -62,20 +62,20 @@ export default {
 .v-pagination button:hover{
   background: rgba(130,177,255,0.3) !important;
 }
-.tablestyle span{
+.table-style span{
   font-family: 'Nanum Gothic', sans-serif;
 }
-.tablestyle thead{
+.table-style thead{
   background-color: cornflowerblue;
 }
-.tablestyle th{
+.table-style th{
   border-right: solid white;
   font-family: 'Nanum Gothic', sans-serif;
 }
-.tablestyle th:last-child{
+.table-style th:last-child{
   border-right: none;
 }
-.tablestyle td {
+.table-style td {
   box-sizing: border-box;
   overflow: hidden;
   list-style: none;
