@@ -1,0 +1,27 @@
+.DS_Store/
+.DS_Store
+myvenv/
+pa-server/db.sqlite3
+.idea/
+static/
+train/
+yolov3.cfg
+yolov3.weights
+deeprank.pt
+embedding.txt
+triplet.csv
+node_modules/
+/dist
+pa-server/api/assets/
+pa-server/config/secrets.json
+
+### Django ###
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media
+ImageSimilarity/staticfiles/
